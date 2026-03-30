@@ -1,0 +1,1001 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Design &amp; Development Services</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html, body {
+      height: 100%;
+      font-family: 'Outfit', sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #0f172a 0%, #1a1f3a 50%, #0f172a 100%);
+      color: #e2e8f0;
+    }
+    
+    .app-wrapper {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      overflow-auto;
+    }
+    
+    .heading-font {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+    }
+    
+    .gradient-text {
+      background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .glow-effect {
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
+    }
+
+    .interactive-hover {
+      transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+    }
+
+    .pricing-highlight {
+      position: relative;
+      border: 2px solid rgba(0, 212, 255, 0.6) !important;
+      background: rgba(0, 212, 255, 0.05) !important;
+    }
+
+    .pricing-highlight::before {
+      content: "Most Popular";
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+      color: #0f172a;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .pricing-highlight:hover {
+      box-shadow: 0 20px 50px rgba(0, 212, 255, 0.25) !important;
+    }
+    
+    .service-card {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(71, 170, 255, 0.2);
+      transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .service-card:hover {
+      background: rgba(30, 41, 59, 0.95);
+      border-color: rgba(71, 170, 255, 0.6);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 50px rgba(0, 212, 255, 0.2);
+    }
+
+    .service-card:hover::before {
+      opacity: 1;
+    }
+
+    .tooltip {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-8px);
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(71, 170, 255, 0.5);
+      color: #e2e8f0;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+      z-index: 10;
+    }
+
+    .service-card:hover .tooltip {
+      opacity: 1;
+    }
+
+    .feature-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(71, 170, 255, 0.1);
+      border: 1px solid rgba(71, 170, 255, 0.3);
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      transition: all 0.3s ease;
+    }
+
+    .feature-badge:hover {
+      background: rgba(71, 170, 255, 0.2);
+      border-color: rgba(71, 170, 255, 0.6);
+      cursor: pointer;
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 768px) {
+      .feature-badge {
+        display: flex;
+        width: 100%;
+        justify-content: flex-start;
+      }
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+      color: #0f172a;
+      font-weight: 600;
+      transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+      border: none;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+    }
+
+    .btn-primary:hover::before {
+      transform: translateX(100%);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 40px rgba(0, 212, 255, 0.4);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+    
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .section-subtitle {
+      font-size: 1.125rem;
+      color: #cbd5e1;
+      margin-bottom: 2rem;
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% {
+        box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+      }
+      50% {
+        box-shadow: 0 0 40px rgba(0, 212, 255, 0.4);
+      }
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-12px);
+      }
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    .hero-title {
+      animation: slideInLeft 0.8s ease-out;
+    }
+
+    .hero-subtitle {
+      animation: fadeInUp 0.8s ease-out 0.1s both;
+    }
+
+    .hero-description {
+      animation: fadeInUp 0.8s ease-out 0.2s both;
+    }
+
+    .hero-button {
+      animation: fadeInUp 0.8s ease-out 0.3s both;
+    }
+
+    .hero-image {
+      animation: slideInRight 0.8s ease-out;
+    }
+
+    .service-card {
+      animation: scaleIn 0.6s ease-out;
+    }
+
+    .service-card:nth-child(1) { animation-delay: 0s; }
+    .service-card:nth-child(2) { animation-delay: 0.1s; }
+    .service-card:nth-child(3) { animation-delay: 0.2s; }
+    .service-card:nth-child(4) { animation-delay: 0.3s; }
+    .service-card:nth-child(5) { animation-delay: 0.4s; }
+    .service-card:nth-child(6) { animation-delay: 0.5s; }
+
+    .feature-badge {
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    .feature-badge:nth-child(1) { animation-delay: 0s; }
+    .feature-badge:nth-child(2) { animation-delay: 0.1s; }
+    .feature-badge:nth-child(3) { animation-delay: 0.2s; }
+    .feature-badge:nth-child(4) { animation-delay: 0.3s; }
+    .feature-badge:nth-child(5) { animation-delay: 0.4s; }
+    .feature-badge:nth-child(6) { animation-delay: 0.5s; }
+
+    .why-choose-item {
+      animation: slideInLeft 0.6s ease-out;
+    }
+
+    .why-choose-item:nth-child(1) { animation-delay: 0s; }
+    .why-choose-item:nth-child(2) { animation-delay: 0.1s; }
+    .why-choose-item:nth-child(3) { animation-delay: 0.2s; }
+    .why-choose-item:nth-child(4) { animation-delay: 0.3s; }
+
+    .final-cta {
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    .nav-link {
+      transition: color 0.3s ease;
+      position: relative;
+    }
+
+    .nav-link:hover {
+      color: #00d4ff;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #00d4ff, #0099ff);
+      transition: width 0.3s ease;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    .floaty {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .stat-box {
+      background: rgba(71, 170, 255, 0.08);
+      border: 1px solid rgba(71, 170, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .stat-box:hover {
+      background: rgba(71, 170, 255, 0.15);
+      border-color: rgba(71, 170, 255, 0.4);
+      transform: translateY(-4px);
+    }
+
+    .trust-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      color: #86efac;
+      font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+      .section-title {
+        font-size: 1.875rem;
+      }
+
+      .hero-title {
+        font-size: 2.5rem;
+      }
+
+      .service-card {
+        animation: fadeInUp 0.6s ease-out;
+      }
+
+      .group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 14px;
+        background: rgba(71, 170, 255, 0.04);
+        border-radius: 8px;
+      }
+
+      .group:hover {
+        background: rgba(71, 170, 255, 0.1);
+      }
+
+      .group .feature-badge {
+        width: 100%;
+        padding: 10px;
+        justify-content: flex-start;
+      }
+
+      .group p {
+        margin-top: 4px !important;
+        line-height: 1.5;
+      }
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="app-wrapper"><!-- Navigation -->
+   <nav class="sticky top-0 z-50 backdrop-blur-md bg-slate-900/30 border-b border-slate-700/30">
+    <div class="max-w-7xl mx-auto px-4 md:px-6 py-4 flex justify-between items-center">
+     <div class="heading-font text-lg md:text-xl gradient-text truncate">
+      Axios Software Solutions
+     </div>
+     <div class="hidden md:flex items-center gap-8">
+      <a href="#about" class="nav-link text-slate-300 hover:text-cyan-400 text-sm font-medium">About Us</a> <button id="nav-contact" class="btn-primary px-6 py-2 rounded-lg text-sm whitespace-nowrap">Contact Us</button>
+     </div><button id="mobile-menu-btn" class="md:hidden text-slate-300 hover:text-cyan-400"> <i data-lucide="menu" style="width: 24px; height: 24px;"></i> </button>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden bg-slate-900/80 border-t border-slate-700/30 px-4 py-4 space-y-3">
+     <a href="#about" class="block nav-link text-slate-300 hover:text-cyan-400 text-sm font-medium py-2">About Us</a> <button id="mobile-nav-contact" class="w-full btn-primary px-4 py-2 rounded-lg text-sm font-semibold">Contact Us</button>
+    </div>
+   </nav><!-- Hero Section -->
+   <section class="relative px-6 py-20 md:py-32 max-w-7xl mx-auto w-full">
+    <div class="grid md:grid-cols-2 gap-12 items-center">
+     <div>
+      <h1 class="hero-title heading-font text-4xl md:text-6xl mb-4 md:mb-6 leading-tight"><span id="company-name">Web Design &amp; Development</span><br><span class="gradient-text">Services</span></h1>
+      <p id="tagline" class="hero-subtitle text-base md:text-lg text-slate-300 mb-6 md:mb-8">Build More Than a Website — Build an Asset</p>
+      <p class="hero-description text-sm md:text-base text-slate-400 mb-6 md:mb-8">Your website isn't just an online presence—it's your digital storefront, sales tool, and brand experience all in one. We create modern, high-performing websites designed to attract, convert, and scale.</p><button id="cta-button" class="hero-button btn-primary px-6 md:px-8 py-2 md:py-3 rounded-lg font-semibold flex items-center gap-2 text-sm md:text-base"> <span id="cta-text">Watch Video</span> <i data-lucide="play" style="width: 20px; height: 20px;"></i> </button>
+     </div>
+     <div class="hero-image relative h-72 md:h-96 hidden md:block">
+      <div class="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-2xl blur-3xl"></div>
+      <div class="relative bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-8 border border-slate-700 floaty">
+       <div class="space-y-4">
+        <div class="h-3 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full w-3/4"></div>
+        <div class="h-3 bg-slate-700 rounded-full w-1/2"></div>
+        <div class="h-3 bg-slate-700 rounded-full w-2/3"></div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- About Us Section -->
+   <section id="about-section" class="px-6 py-20 max-w-7xl mx-auto w-full">
+    <h2 class="heading-font section-title text-center mb-16">About Us</h2>
+    <div class="grid md:grid-cols-2 gap-12 items-center">
+     <div>
+      <p class="text-slate-300 text-lg mb-6">At Axios Software Solutions, we're passionate about creating digital experiences that drive real business results.</p>
+      <p class="text-slate-400 mb-6">Founded with a mission to bridge the gap between design and functionality, we've spent years perfecting our craft. Our team combines strategic thinking with technical expertise to deliver websites and applications that don't just look good—they perform.</p>
+      <div class="space-y-4 mt-8">
+       <div class="flex items-start gap-4"><span class="text-3xl text-cyan-400">🎯</span>
+        <div>
+         <h3 class="font-semibold text-white mb-1">Our Mission</h3>
+         <p class="text-slate-400 text-sm">To empower businesses with digital solutions that transform ideas into revenue-generating assets.</p>
+        </div>
+       </div>
+       <div class="flex items-start gap-4"><span class="text-3xl text-cyan-400">💡</span>
+        <div>
+         <h3 class="font-semibold text-white mb-1">Our Approach</h3>
+         <p class="text-slate-400 text-sm">We don't just build websites; we partner with you to understand your goals, audience, and market. Every project is a strategic collaboration.</p>
+        </div>
+       </div>
+       <div class="flex items-start gap-4"><span class="text-3xl text-cyan-400">🚀</span>
+        <div>
+         <h3 class="font-semibold text-white mb-1">Our Promise</h3>
+         <p class="text-slate-400 text-sm">Quality work, clear communication, and results that matter. We measure success by your success.</p>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="relative h-72 md:h-96 hidden md:block">
+      <div class="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-2xl blur-3xl"></div>
+      <div class="relative bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-8 border border-slate-700 space-y-6 floaty">
+       <div class="bg-slate-700/50 rounded-lg p-4">
+        <p class="text-cyan-400 font-semibold text-sm mb-2">Team Expertise</p>
+        <div class="flex gap-2 flex-wrap"><span class="bg-cyan-500/20 text-cyan-300 px-3 py-1 rounded-full text-xs">Web Development</span> <span class="bg-cyan-500/20 text-cyan-300 px-3 py-1 rounded-full text-xs">UI/UX Design</span> <span class="bg-cyan-500/20 text-cyan-300 px-3 py-1 rounded-full text-xs">Strategy</span>
+        </div>
+       </div>
+       <div class="bg-slate-700/50 rounded-lg p-4">
+        <p class="text-cyan-400 font-semibold text-sm mb-2">Tech Stack</p>
+        <div class="flex gap-2 flex-wrap"><span class="bg-cyan-500/20 text-cyan-300 px-3 py-1 rounded-full text-xs">React</span> 
+          <span class="bg-cyan-500/20 text-cyan-300 px-3 py-1 rounded-full text-xs">Node.js</span> 
+          <span class="bg-cyan-500/20 text-cyan-300 px-3 py-1 rounded-full text-xs">Express.js</span>
+          <span class="bg-cyan-500/20 text-cyan-300 px-3 py-1 rounded-full text-xs">Flutter</span>
+          <span class="bg-cyan-500/20 text-cyan-300 px-3 py-1 rounded-full text-xs">Tailwind</span>
+          <span class="bg-cyan-500/20 text-cyan-300 px-3 py-1 rounded-full text-xs">Firebase</span>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Trust Stats -->
+   <section class="px-6 py-16 max-w-7xl mx-auto w-full">
+    <div class="grid md:grid-cols-4 gap-4">
+     <div class="stat-box rounded-lg p-6 text-center">
+      <div class="heading-font text-3xl gradient-text mb-2">
+       11+
+      </div>
+      <p class="text-sm text-slate-400">Projects Completed</p>
+     </div>
+     <div class="stat-box rounded-lg p-6 text-center">
+      <div class="heading-font text-3xl gradient-text mb-2">
+       98%
+      </div>
+      <p class="text-sm text-slate-400">Client Satisfaction</p>
+     </div>
+     <div class="stat-box rounded-lg p-6 text-center">
+      <div class="heading-font text-3xl gradient-text mb-2">
+       4+
+      </div>
+      <p class="text-sm text-slate-400">Years Experience</p>
+     </div>
+     <div class="stat-box rounded-lg p-6 text-center">
+      <div class="heading-font text-3xl gradient-text mb-2">
+       24/7
+      </div>
+      <p class="text-sm text-slate-400">Support Available</p>
+     </div>
+    </div>
+   </section><!-- Services Grid -->
+   <section class="px-6 py-20 max-w-7xl mx-auto w-full">
+    <h2 class="heading-font section-title text-center mb-16">Our Service Packages</h2>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"><!-- Starter -->
+     <div class="service-card rounded-xl p-8" onclick="openServiceModal('starter')">
+      <div class="tooltip">
+       Click to see examples →
+      </div>
+      <div class="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center mb-4">
+       <span class="text-2xl text-green-400">🟢</span>
+      </div>
+      <h3 class="heading-font text-xl mb-2">Starter Websites</h3>
+      <p class="text-slate-400 text-sm mb-4">Clean. Professional. Effective.</p>
+      <ul class="space-y-2 mb-6 text-sm text-slate-400">
+       <li class="flex items-start gap-2"><span class="text-green-400 mt-0.5">✓</span> <span>Mobile-responsive design</span></li>
+       <li class="flex items-start gap-2"><span class="text-green-400 mt-0.5">✓</span> <span>Essential pages included</span></li>
+       <li class="flex items-start gap-2"><span class="text-green-400 mt-0.5">✓</span> <span>Contact forms</span></li>
+      </ul>
+      <p class="heading-font text-lg gradient-text mb-4">Starting at ₱15,000</p>
+      <p class="text-xs text-slate-500">Timeline: 1–3 weeks</p>
+     </div><!-- Business -->
+     <div class="service-card rounded-xl p-8" onclick="openServiceModal('business')">
+      <div class="tooltip">
+       Click to see examples →
+      </div>
+      <div class="w-12 h-12 bg-yellow-500/20 rounded-lg flex items-center justify-center mb-4">
+       <span class="text-2xl text-yellow-400">🟡</span>
+      </div>
+      <h3 class="heading-font text-xl mb-2">Business Websites</h3>
+      <p class="text-slate-400 text-sm mb-4">Designed to Generate Leads</p>
+      <ul class="space-y-2 mb-6 text-sm text-slate-400">
+       <li class="flex items-start gap-2"><span class="text-yellow-400 mt-0.5">✓</span> <span>Conversion-focused design</span></li>
+       <li class="flex items-start gap-2"><span class="text-yellow-400 mt-0.5">✓</span> <span>Lead capture forms</span></li>
+       <li class="flex items-start gap-2"><span class="text-yellow-400 mt-0.5">✓</span> <span>Blog system (optional)</span></li>
+      </ul>
+      <p class="text-xs text-slate-500">Timeline: 2–5 weeks</p>
+     </div><!-- E-Commerce -->
+     <div class="service-card rounded-xl p-8" onclick="openServiceModal('ecommerce')">
+      <div class="tooltip">
+       Click to see examples →
+      </div>
+      <div class="w-12 h-12 bg-orange-500/20 rounded-lg flex items-center justify-center mb-4">
+       <span class="text-2xl text-orange-400">🟠</span>
+      </div>
+      <h3 class="heading-font text-xl mb-2">E-Commerce Websites</h3>
+      <p class="text-slate-400 text-sm mb-4">Built to Sell &amp; Scale</p>
+      <ul class="space-y-2 mb-6 text-sm text-slate-400">
+       <li class="flex items-start gap-2"><span class="text-orange-400 mt-0.5">✓</span> <span>Product catalog</span></li>
+       <li class="flex items-start gap-2"><span class="text-orange-400 mt-0.5">✓</span> <span>Secure checkout</span></li>
+       <li class="flex items-start gap-2"><span class="text-orange-400 mt-0.5">✓</span> <span>Order management</span></li>
+      </ul>
+      <p class="text-xs text-slate-500">Timeline: 4–8 weeks</p>
+     </div><!-- Interactive -->
+     <div class="service-card rounded-xl p-8" onclick="openServiceModal('interactive')">
+      <div class="tooltip">
+       Click to see examples →
+      </div>
+      <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mb-4">
+       <span class="text-2xl text-blue-400">🔵</span>
+      </div>
+      <h3 class="heading-font text-xl mb-2">Interactive Platforms</h3>
+      <p class="text-slate-400 text-sm mb-4">Engage. Retain. Grow.</p>
+      <ul class="space-y-2 mb-6 text-sm text-slate-400">
+       <li class="flex items-start gap-2"><span class="text-blue-400 mt-0.5">✓</span> <span>User accounts &amp; dashboards</span></li>
+       <li class="flex items-start gap-2"><span class="text-blue-400 mt-0.5">✓</span> <span>Membership systems</span></li>
+       <li class="flex items-start gap-2"><span class="text-blue-400 mt-0.5">✓</span> <span>Community features</span></li>
+      </ul>
+      <p class="text-xs text-slate-500">Timeline: Custom</p>
+     </div><!-- Booking -->
+     <div class="service-card rounded-xl p-8" onclick="openServiceModal('booking')">
+      <div class="tooltip">
+       Click to see examples →
+      </div>
+      <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center mb-4">
+       <span class="text-2xl text-purple-400">🟣</span>
+      </div>
+      <h3 class="heading-font text-xl mb-2">Booking &amp; Automation</h3>
+      <p class="text-slate-400 text-sm mb-4">Save Time. Increase Efficiency.</p>
+      <ul class="space-y-2 mb-6 text-sm text-slate-400">
+       <li class="flex items-start gap-2"><span class="text-purple-400 mt-0.5">✓</span> <span>Appointment systems</span></li>
+       <li class="flex items-start gap-2"><span class="text-purple-400 mt-0.5">✓</span> <span>Calendar integration</span></li>
+       <li class="flex items-start gap-2"><span class="text-purple-400 mt-0.5">✓</span> <span>Notifications</span></li>
+      </ul>
+      <p class="text-xs text-slate-500">Timeline: 2–4 weeks</p>
+     </div><!-- Custom -->
+     <div class="service-card rounded-xl p-8" onclick="openServiceModal('custom')">
+      <div class="tooltip">
+       Click to see examples →
+      </div>
+      <div class="w-12 h-12 bg-red-500/20 rounded-lg flex items-center justify-center mb-4">
+       <span class="text-2xl text-red-400">🔴</span>
+      </div>
+      <h3 class="heading-font text-xl mb-2">Custom Web Applications</h3>
+      <p class="text-slate-400 text-sm mb-4">Built for Serious Growth</p>
+      <ul class="space-y-2 mb-6 text-sm text-slate-400">
+       <li class="flex items-start gap-2"><span class="text-red-400 mt-0.5">✓</span> <span>Custom dashboards</span></li>
+       <li class="flex items-start gap-2"><span class="text-red-400 mt-0.5">✓</span> <span>API integrations</span></li>
+       <li class="flex items-start gap-2"><span class="text-red-400 mt-0.5">✓</span> <span>Complex workflows</span></li>
+      </ul>
+      <p class="text-xs text-slate-500">Timeline: Custom</p>
+     </div>
+    </div>
+   </section><!-- Add-ons Section -->
+   <section class="px-6 py-20 max-w-7xl mx-auto w-full">
+    <h2 class="heading-font section-title text-center mb-16">Enhance Your Website</h2>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+     <div class="group flex flex-col gap-3 p-4 rounded-lg hover:bg-slate-800/50 transition-all duration-300">
+      <div class="feature-badge" style="width: fit-content;">
+       <span>🎨</span> <span>Custom UI/UX Design</span>
+      </div>
+      <p class="text-xs text-slate-400 mt-1">Tailored designs that reflect your brand and improve user experience</p>
+     </div>
+     <div class="group flex flex-col gap-3 p-4 rounded-lg hover:bg-slate-800/50 transition-all duration-300">
+      <div class="feature-badge" style="width: fit-content;">
+       <span>🧩</span> <span>API Integrations</span>
+      </div>
+      <p class="text-xs text-slate-400 mt-1">Connect your site with third-party tools and services</p>
+     </div>
+     <div class="group flex flex-col gap-3 p-4 rounded-lg hover:bg-slate-800/50 transition-all duration-300">
+      <div class="feature-badge" style="width: fit-content;">
+       <span>🌍</span> <span>Multi-language Support</span>
+      </div>
+      <p class="text-xs text-slate-400 mt-1">Reach global audiences in their native language</p>
+     </div>
+     <div class="group flex flex-col gap-3 p-4 rounded-lg hover:bg-slate-800/50 transition-all duration-300">
+      <div class="feature-badge" style="width: fit-content;">
+       <span>✨</span> <span>Advanced Animations</span>
+      </div>
+      <p class="text-xs text-slate-400 mt-1">Smooth, engaging animations that captivate visitors</p>
+     </div>
+     <div class="group flex flex-col gap-3 p-4 rounded-lg hover:bg-slate-800/50 transition-all duration-300">
+      <div class="feature-badge" style="width: fit-content;">
+       <span>🎯</span> <span>SEO Optimization</span>
+      </div>
+      <p class="text-xs text-slate-400 mt-1">Rank higher on Google and attract more organic traffic</p>
+     </div>
+     <div class="group flex flex-col gap-3 p-4 rounded-lg hover:bg-slate-800/50 transition-all duration-300">
+      <div class="feature-badge" style="width: fit-content;">
+       <span>✍️</span> <span>Content Writing</span>
+      </div>
+      <p class="text-xs text-slate-400 mt-1">Compelling copy and content that converts</p>
+     </div>
+    </div>
+   </section><!-- Ongoing Support Section -->
+   <section class="px-6 py-20 max-w-7xl mx-auto w-full">
+    <div class="grid md:grid-cols-2 gap-12 items-center">
+     <div>
+      <h2 class="heading-font text-3xl md:text-4xl mb-6">🔁 Ongoing Support</h2>
+      <p class="text-slate-400 mb-8">Keep your website secure, fast, and updated:</p>
+      <div class="space-y-4">
+       <div class="flex items-start gap-3 p-4 rounded-lg hover:bg-slate-800/50 transition-colors duration-300 group cursor-pointer" title="We handle all server and domain setup"><span class="text-2xl text-cyan-400 group-hover:scale-110 transition-transform">🌐</span>
+        <div>
+         <p class="font-semibold text-slate-200">Hosting &amp; Domain Setup</p>
+         <p class="text-sm text-slate-500">Professional hosting and domain management included</p>
+        </div>
+       </div>
+       <div class="flex items-start gap-3 p-4 rounded-lg hover:bg-slate-800/50 transition-colors duration-300 group cursor-pointer" title="Regular updates and performance optimization"><span class="text-2xl text-green-400 group-hover:scale-110 transition-transform">🔧</span>
+        <div>
+         <p class="font-semibold text-slate-200">Monthly Maintenance</p>
+         <p class="text-sm text-slate-500">Regular updates and performance optimization</p>
+        </div>
+       </div>
+       <div class="flex items-start gap-3 p-4 rounded-lg hover:bg-slate-800/50 transition-colors duration-300 group cursor-pointer" title="Data protection and automatic backups"><span class="text-2xl text-blue-400 group-hover:scale-110 transition-transform">🔒</span>
+        <div>
+         <p class="font-semibold text-slate-200">Security &amp; Backups</p>
+         <p class="text-sm text-slate-500">Data protection and automatic backup systems</p>
+        </div>
+       </div>
+       <div class="flex items-start gap-3 p-4 rounded-lg hover:bg-slate-800/50 transition-colors duration-300 group cursor-pointer" title="Dedicated support whenever you need help"><span class="text-2xl text-purple-400 group-hover:scale-110 transition-transform">👨‍💻</span>
+        <div>
+         <p class="font-semibold text-slate-200">Technical Support</p>
+         <p class="text-sm text-slate-500">Dedicated support whenever you need help</p>
+        </div>
+       </div>
+      </div>
+      <p class="heading-font text-lg gradient-text mt-8">Starts at ₱1,000/month</p>
+     </div>
+     <div class="relative h-72 md:h-96 hidden md:block">
+      <div class="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-2xl blur-3xl"></div>
+      <div class="relative bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-8 border border-slate-700 space-y-4 floaty">
+       <div class="flex items-center gap-3 p-3 bg-slate-700/50 rounded-lg">
+        <span class="text-xl">📊</span>
+        <div class="flex-1 h-2 bg-gradient-to-r from-green-500 to-blue-500 rounded-full"></div>
+       </div>
+       <div class="flex items-center gap-3 p-3 bg-slate-700/50 rounded-lg">
+        <span class="text-xl">⚡</span>
+        <div class="flex-1 h-2 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full"></div>
+       </div>
+       <div class="flex items-center gap-3 p-3 bg-slate-700/50 rounded-lg">
+        <span class="text-xl">🔐</span>
+        <div class="flex-1 h-2 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full"></div>
+       </div>
+       <p class="text-center text-slate-400 text-sm pt-4">Monitoring &amp; maintaining your site 24/7</p>
+      </div>
+     </div>
+    </div>
+   </section><!-- Why Choose Us -->
+   <section class="px-6 py-20 max-w-7xl mx-auto w-full">
+    <h2 class="heading-font section-title text-center mb-16">Why Choose Us?</h2>
+    <div class="grid md:grid-cols-2 gap-8">
+     <div class="flex gap-4">
+      <span class="text-2xl">✔</span>
+      <div>
+       <h3 class="font-semibold mb-2">Strategic, Conversion-Focused Design</h3>
+       <p class="text-slate-400">Every pixel designed to convert visitors into customers</p>
+      </div>
+     </div>
+     <div class="flex gap-4">
+      <span class="text-2xl">✔</span>
+      <div>
+       <h3 class="font-semibold mb-2">Fast, Responsive, Modern Builds</h3>
+       <p class="text-slate-400">Lightning-quick performance on all devices</p>
+      </div>
+     </div>
+     <div class="flex gap-4">
+      <span class="text-2xl">✔</span>
+      <div>
+       <h3 class="font-semibold mb-2">Clear Communication &amp; Smooth Process</h3>
+       <p class="text-slate-400">Stay informed every step of the way</p>
+      </div>
+     </div>
+     <div class="flex gap-4">
+      <span class="text-2xl">✔</span>
+      <div>
+       <h3 class="font-semibold mb-2">Scalable Solutions for Long-Term Growth</h3>
+       <p class="text-slate-400">Built to grow with your business</p>
+      </div>
+     </div>
+    </div>
+   </section><!-- CTA Section -->
+   <section class="px-6 py-20 max-w-4xl mx-auto w-full text-center">
+    <h2 class="heading-font text-4xl md:text-5xl mb-6">Ready to dive into Something new?</h2>
+    <p class="text-lg text-slate-400 mb-8">Whether you're starting small or building something big, we'll help you create a powerful online presence that delivers results.</p><button id="final-cta-button" class="btn-primary px-8 py-3 rounded-lg font-semibold">📩 Message Us to Get Started</button>
+   </section><!-- Footer -->
+   <footer class="border-t border-slate-700/30 px-6 py-8 mt-20">
+    <div class="max-w-7xl mx-auto text-center text-slate-500 text-sm">
+     <p>© 2024 Web Design &amp; Development Services. All rights reserved.</p>
+    </div>
+   </footer>
+  </div>
+  <script>
+    let config = {
+      company_name: "Web Design & Development",
+      tagline: "Build More Than a Website — Build an Asset",
+      cta_button_text: "Watch Video"
+    };
+
+    const defaultConfig = { ...config };
+
+    const elementHandler = {
+      defaultConfig,
+      onConfigChange: async (newConfig) => {
+        config = newConfig;
+        document.getElementById('company-name').textContent = config.company_name || defaultConfig.company_name;
+        document.getElementById('tagline').textContent = config.tagline || defaultConfig.tagline;
+        document.getElementById('cta-text').textContent = config.cta_button_text || defaultConfig.cta_button_text;
+      },
+      mapToCapabilities: () => ({
+        recolorables: [],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      }),
+      mapToEditPanelValues: () => new Map([
+        ["company_name", config.company_name || defaultConfig.company_name],
+        ["tagline", config.tagline || defaultConfig.tagline],
+        ["cta_button_text", config.cta_button_text || defaultConfig.cta_button_text]
+      ])
+    };
+
+    if (window.elementSdk) {
+      window.elementSdk.init(elementHandler);
+    }
+
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    if (mobileMenuBtn) {
+      mobileMenuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+      });
+    }
+
+    // Close mobile menu when link is clicked
+    const mobileNavLinks = mobileMenu.querySelectorAll('a, button');
+    mobileNavLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+      });
+    });
+
+    // Service modal handler
+    function openServiceModal(serviceType) {
+      const services = {
+        starter: {
+          title: "Starter Websites",
+          description: "Clean. Professional. Effective.",
+          subtitle: "Perfect for individuals and small businesses who need a strong, credible online presence.",
+          examples: ["Business / Company Profile", "Personal Website", "Portfolio Website", "Landing Page", "Blog / Content Site", "Brochure Website"],
+          price: "Starting at ₱15,000",
+          timeline: "1–3 weeks",
+          bestFor: "Portfolios, personal brands, small businesses"
+        },
+        business: {
+          title: "Business Websites",
+          description: "Designed to Generate Leads",
+          subtitle: "Turn your website into a client acquisition tool that works 24/7.",
+          examples: ["Corporate Website", "Consulting / Service Website", "Startup Website", "Agency Website", "SaaS Marketing Website"],
+          price: "Custom pricing",
+          timeline: "2–5 weeks",
+          bestFor: "Service businesses, agencies, startups"
+        },
+        ecommerce: {
+          title: "E-Commerce Websites",
+          description: "Built to Sell & Scale",
+          subtitle: "Launch your online store with a seamless shopping experience.",
+          examples: ["Online Store (Single Vendor)", "Dropshipping Website", "Marketplace (Multi-vendor)", "Subscription E-commerce", "Auction / Bidding Website"],
+          price: "Custom pricing",
+          timeline: "4–8 weeks",
+          bestFor: "Brands, retailers, online sellers"
+        },
+        interactive: {
+          title: "Interactive Platforms",
+          description: "Engage. Retain. Grow.",
+          subtitle: "For businesses that need more than just pages—they need interaction.",
+          examples: ["Membership Website", "Online Forum", "Community Platform", "Social Network", "Subscription Content Platform"],
+          price: "Custom pricing",
+          timeline: "Custom",
+          bestFor: "Communities, content platforms, startups"
+        },
+        booking: {
+          title: "Booking & Automation Systems",
+          description: "Save Time. Increase Efficiency.",
+          subtitle: "Automate your operations and simplify customer experiences.",
+          examples: ["Hotel / Restaurant Booking System", "Appointment Scheduling Website", "Event Registration Website", "Ticketing Platform"],
+          price: "Custom pricing",
+          timeline: "2–4 weeks",
+          bestFor: "Clinics, salons, events, service providers"
+        },
+        custom: {
+          title: "Custom Web Applications",
+          description: "Built for Serious Growth",
+          subtitle: "Advanced, scalable systems tailored to your exact business needs.",
+          examples: ["SaaS Platform", "CRM / ERP System", "Learning Management System (LMS)", "Job Portal", "Real Estate Platform", "Logistics / Tracking System"],
+          price: "Custom pricing",
+          timeline: "Custom",
+          bestFor: "Startups, enterprises, tech platforms"
+        }
+      };
+
+      const service = services[serviceType];
+      if (!service) return;
+
+      const modal = document.createElement('div');
+      modal.className = 'fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4 overflow-auto';
+      modal.innerHTML = `
+        <div class="bg-slate-900 border border-slate-700 rounded-xl p-6 max-w-2xl w-full my-6">
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <h2 class="heading-font text-3xl text-white mb-2">${service.title}</h2>
+              <p class="text-slate-400 text-sm">${service.subtitle}</p>
+            </div>
+            <button onclick="this.closest('.fixed').remove()" class="text-slate-400 hover:text-white text-2xl flex-shrink-0">×</button>
+          </div>
+
+          <div class="space-y-6">
+            <div>
+              <h3 class="heading-font text-lg text-cyan-400 mb-2">💡 Examples of Website Types:</h3>
+              <ul class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                ${service.examples.map(ex => `<li class="text-slate-300 text-sm flex items-start gap-2"><span class="text-cyan-400">•</span> <span>${ex}</span></li>`).join('')}
+              </ul>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-4">
+              <div class="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
+                <p class="text-slate-500 text-xs mb-1">STARTING PRICE</p>
+                <p class="heading-font text-lg gradient-text">${service.price}</p>
+              </div>
+              <div class="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
+                <p class="text-slate-500 text-xs mb-1">TIMELINE</p>
+                <p class="heading-font text-lg text-white">${service.timeline}</p>
+              </div>
+              <div class="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
+                <p class="text-slate-500 text-xs mb-1">BEST FOR</p>
+                <p class="text-slate-300 text-sm">${service.bestFor}</p>
+              </div>
+            </div>
+
+            <button onclick="openContact(); this.closest('.fixed').remove()" class="w-full btn-primary px-6 py-3 rounded-lg font-semibold text-base hover:shadow-lg">
+              Get in Touch & Learn More
+            </button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+    }
+
+    // Video player handler
+    function openVideoPlayer() {
+      const modal = document.createElement('div');
+      modal.className = 'fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4';
+      modal.innerHTML = `
+        <div class="bg-slate-900 border border-slate-700 rounded-xl overflow-hidden max-w-4xl w-full">
+          <div class="relative bg-black aspect-video">
+            <video width="100%" height="100%" controls style="width: 100%; height: 100%; object-fit: contain;">
+              <source src="https://commondatastorage.googleapis.com/gtv-videos-library/sample/BigBuckBunny.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+            <button onclick="this.closest('.fixed').remove()" class="absolute top-4 right-4 bg-black/70 hover:bg-black text-white rounded-full w-10 h-10 flex items-center justify-center text-xl">×</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+    }
+
+    // Contact handlers
+    function openContact() {
+      const modal = document.createElement('div');
+      modal.className = 'fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4';
+      modal.innerHTML = `
+        <div class="bg-slate-900 border border-slate-700 rounded-xl p-6 max-w-sm w-full">
+          <h3 class="heading-font text-xl mb-4 text-white">Get in Touch</h3>
+          <div class="space-y-3">
+            <a href="https://www.facebook.com/THETHUNDERBREAKER/" target="_blank" rel="noopener noreferrer" class="block btn-primary px-4 py-3 rounded-lg text-center font-semibold text-sm">
+              📘 Message on Facebook
+            </a>
+            <a href="mailto:lordanthony098@gmail.com" class="block btn-primary px-4 py-3 rounded-lg text-center font-semibold text-sm">
+              ✉️ Send Email
+            </a>
+            <p class="text-slate-400 text-xs mt-2">We typically respond within 24 hours.</p>
+            <button onclick="this.closest('.fixed').remove()" class="w-full px-4 py-2 rounded-lg text-slate-400 border border-slate-600 font-semibold text-sm">
+              Close
+            </button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+    }
+
+    // About Us handler
+    function scrollToAbout() {
+      document.getElementById('about-section').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Attach handlers
+    const navContact = document.getElementById('nav-contact');
+    const mobileNavContact = document.getElementById('mobile-nav-contact');
+    const ctaButton = document.getElementById('cta-button');
+    const finalCtaButton = document.getElementById('final-cta-button');
+
+    if (navContact) navContact.addEventListener('click', openContact);
+    if (mobileNavContact) mobileNavContact.addEventListener('click', openContact);
+    if (ctaButton) ctaButton.addEventListener('click', openVideoPlayer);
+    if (finalCtaButton) finalCtaButton.addEventListener('click', openContact);
+
+    // About Us link handler
+    const aboutLinks = document.querySelectorAll('a[href="#about"]');
+    aboutLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        scrollToAbout();
+      });
+    });
+
+    lucide.createIcons();
+  </script>
+  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9e45aa7f2030b9ff',t:'MTc3NDg1ODUyMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9e47aab707ca1483',t:'MTc3NDg3OTUwMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
