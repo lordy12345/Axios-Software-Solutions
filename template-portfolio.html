@@ -1,0 +1,902 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alex Rivera - Frontend Developer &amp; QA Specialist</title>
+  <link rel="icon" type="image/x-icon" href="./resources/logo_icon.ico">
+  <link rel="shortcut icon" href="./resources/logo_icon.ico">
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap" rel="stylesheet">
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            background-color: #0a0e27;
+            color: #e8ebf0;
+        }
+
+        body.light-mode {
+            background-color: #f9fafb;
+            color: #838383;
+        }
+
+        .page-wrapper {
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+
+        /* Hero animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(59, 130, 246, 0.6);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .hero-title {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .hero-subtitle {
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .hero-buttons {
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        .hero-image {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .glow-effect {
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-8px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            border: 2px solid #3b82f6;
+            color: #3b82f6;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: #3b82f6;
+            color: white;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .dark-mode .btn-secondary {
+            border-color: #60a5fa;
+            color: #60a5fa;
+        }
+
+        .dark-mode .btn-secondary:hover {
+            background: #60a5fa;
+            color: #0a0e27;
+        }
+
+        .skill-bar {
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .dark-mode .skill-bar {
+            background: #1f2937;
+        }
+
+        .skill-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            border-radius: 3px;
+            transition: width 0.8s ease;
+            animation: slideInLeft 0.8s ease-out forwards;
+        }
+
+        .nav-wrapper {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            background: rgba(249, 250, 251, 0.8);
+            transition: background 0.3s;
+        }
+
+        .dark-mode .nav-wrapper {
+            background: rgba(10, 14, 39, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        nav a {
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            z-index: 1001;
+            transition: width 0.1s;
+        }
+
+        .testimonial-card {
+            position: relative;
+            padding: 32px;
+            border-radius: 12px;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .dark-mode .testimonial-card {
+            background: #111827;
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: 8px;
+            left: 16px;
+            font-size: 48px;
+            color: #3b82f6;
+            opacity: 0.2;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.95);
+            transition: transform 0.3s;
+        }
+
+        .dark-mode .modal-content {
+            background: #111827;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-divider {
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            border-radius: 2px;
+            margin: 16px 0 32px 0;
+        }
+
+        input, textarea {
+            transition: all 0.3s;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s;
+            z-index: 500;
+            color: white;
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+        }
+
+        .dark-mode {
+            color-scheme: dark;
+        }
+    </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="light-mode">
+  <div class="scroll-indicator"></div>
+  <div class="page-wrapper"><!-- Navigation -->
+   <div class="nav-wrapper">
+    <nav class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+     <div class="text-2xl font-bold gradient-text">
+      AR
+     </div>
+     <div class="hidden md:flex gap-8 items-center"><a href="#about" class="text-sm font-medium text-gray-700 dark-mode-text">About</a> <a href="#services" class="text-sm font-medium text-gray-700 dark-mode-text">Services</a> <a href="#portfolio" class="text-sm font-medium text-gray-700 dark-mode-text">Portfolio</a> <a href="#skills" class="text-sm font-medium text-gray-700 dark-mode-text">Skills</a> <a href="#contact" class="text-sm font-medium text-gray-700 dark-mode-text">Contact</a> <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 transition"> <i data-lucide="moon" class="w-4 h-4"></i> </button>
+     </div><button onclick="toggleMobileMenu()" class="md:hidden p-2"> <i data-lucide="menu" class="w-6 h-6"></i> </button>
+    </nav>
+   </div><!-- Hero Section -->
+   <section class="min-h-screen flex items-center justify-center px-6 py-20">
+    <div class="max-w-7xl mx-auto w-full grid md:grid-cols-2 gap-12 items-center">
+     <div>
+      <h1 class="hero-title text-5xl md:text-6xl font-bold mb-6">Crafting Digital <span class="gradient-text">Excellence</span></h1>
+      <p class="hero-subtitle text-lg text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">Frontend Developer &amp; QA Specialist. I build fast, responsive websites and deliver robust testing solutions that exceed expectations.</p>
+      <div class="hero-buttons flex gap-4 flex-wrap"><button onclick="scrollToSection('portfolio')" class="btn-primary px-8 py-3 rounded-lg font-semibold text-white"> View My Work </button> <button onclick="openModal('contact-modal')" class="btn-secondary px-8 py-3 rounded-lg font-semibold"> Hire Me </button>
+      </div>
+     </div>
+     <div class="hero-image flex justify-center">
+      <div class="w-80 h-80 rounded-2xl bg-gradient-to-br from-blue-400 to-purple-500 glow-effect flex items-center justify-center"><i data-lucide="code-2" class="w-32 h-32 text-white opacity-80"></i>
+      </div>
+     </div>
+    </div>
+   </section><!-- About Section -->
+   <section id="about" class="py-20 px-6 bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-7xl mx-auto">
+     <div class="text-center mb-16">
+      <h2 class="text-4xl font-bold mb-4">About Me</h2>
+      <div class="section-divider mx-auto"></div>
+     </div>
+     <div class="grid md:grid-cols-2 gap-12 items-center">
+      <div>
+       <p class="text-lg text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">With 5+ years of experience in web development and QA testing, I've helped dozens of startups and established brands build scalable digital products that perform exceptionally.</p>
+       <p class="text-lg text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">I specialize in modern frontend technologies and have a passion for creating pixel-perfect, accessible, and performant web experiences.</p>
+       <div class="space-y-3">
+        <div class="flex items-center gap-3"><i data-lucide="check-circle" class="w-6 h-6 text-blue-500"></i> <span class="font-medium">Full-stack responsive design</span>
+        </div>
+        <div class="flex items-center gap-3"><i data-lucide="check-circle" class="w-6 h-6 text-blue-500"></i> <span class="font-medium">Comprehensive QA &amp; testing</span>
+        </div>
+        <div class="flex items-center gap-3"><i data-lucide="check-circle" class="w-6 h-6 text-blue-500"></i> <span class="font-medium">Performance optimization</span>
+        </div>
+       </div>
+      </div>
+      <div class="space-y-6">
+       <div class="p-6 bg-white dark:bg-gray-800 rounded-lg card-hover">
+        <h3 class="text-xl font-bold mb-2">📚 Education</h3>
+        <p class="text-gray-600 dark:text-gray-400">B.S. Computer Science</p>
+        <p class="text-sm text-gray-500 dark:text-gray-500">2016-2020</p>
+       </div>
+       <div class="p-6 bg-white dark:bg-gray-800 rounded-lg card-hover">
+        <h3 class="text-xl font-bold mb-2">💼 Experience</h3>
+        <p class="text-gray-600 dark:text-gray-400">Senior Frontend Developer at TechCorp</p>
+        <p class="text-sm text-gray-500 dark:text-gray-500">2020-Present</p>
+       </div>
+       <div class="p-6 bg-white dark:bg-gray-800 rounded-lg card-hover">
+        <h3 class="text-xl font-bold mb-2">🎯 Focus</h3>
+        <p class="text-gray-600 dark:text-gray-400">Building digital products that matter</p>
+        <p class="text-sm text-gray-500 dark:text-gray-500">User-centric design</p>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Services Section -->
+   <section id="services" class="py-20 px-6">
+    <div class="max-w-7xl mx-auto">
+     <div class="text-center mb-16">
+      <h2 class="text-4xl font-bold mb-4">Services I Offer</h2>
+      <div class="section-divider mx-auto"></div>
+     </div>
+     <div class="grid md:grid-cols-2 gap-8">
+      <div class="p-8 bg-white dark:bg-gray-800 rounded-lg card-hover border border-gray-200 dark:border-gray-700">
+       <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center mb-6"><i data-lucide="code" class="w-6 h-6 text-blue-600 dark:text-blue-400"></i>
+       </div>
+       <h3 class="text-2xl font-bold mb-3">Web Development</h3>
+       <p class="text-gray-600 dark:text-gray-400 mb-4">Build modern, responsive websites with clean code and best practices. From landing pages to complex applications.</p>
+       <ul class="space-y-2 text-sm">
+        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500"></i> React &amp; Vue.js</li>
+        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500"></i> Responsive Design</li>
+        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500"></i> API Integration</li>
+       </ul>
+      </div>
+      <div class="p-8 bg-white dark:bg-gray-800 rounded-lg card-hover border border-gray-200 dark:border-gray-700">
+       <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center mb-6"><i data-lucide="palette" class="w-6 h-6 text-purple-600 dark:text-purple-400"></i>
+       </div>
+       <h3 class="text-2xl font-bold mb-3">UI/UX Design</h3>
+       <p class="text-gray-600 dark:text-gray-400 mb-4">Create intuitive, beautiful user interfaces that users love. Design thinking meets modern aesthetics.</p>
+       <ul class="space-y-2 text-sm">
+        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500"></i> Figma Design</li>
+        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500"></i> Prototyping</li>
+        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500"></i> User Research</li>
+       </ul>
+      </div>
+      <div class="p-8 bg-white dark:bg-gray-800 rounded-lg card-hover border border-gray-200 dark:border-gray-700">
+       <div class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center mb-6"><i data-lucide="shield-check" class="w-6 h-6 text-green-600 dark:text-green-400"></i>
+       </div>
+       <h3 class="text-2xl font-bold mb-3">QA &amp; Testing</h3>
+       <p class="text-gray-600 dark:text-gray-400 mb-4">Comprehensive testing to ensure your product is bug-free, performant, and meets all quality standards.</p>
+       <ul class="space-y-2 text-sm">
+        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500"></i> Manual Testing</li>
+        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500"></i> Automation</li>
+        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500"></i> Performance Testing</li>
+       </ul>
+      </div>
+      <div class="p-8 bg-white dark:bg-gray-800 rounded-lg card-hover border border-gray-200 dark:border-gray-700">
+       <div class="w-12 h-12 bg-orange-100 dark:bg-orange-900 rounded-lg flex items-center justify-center mb-6"><i data-lucide="zap" class="w-6 h-6 text-orange-600 dark:text-orange-400"></i>
+       </div>
+       <h3 class="text-2xl font-bold mb-3">Performance Optimization</h3>
+       <p class="text-gray-600 dark:text-gray-400 mb-4">Boost your website's speed and performance. Faster sites = higher conversions and better SEO.</p>
+       <ul class="space-y-2 text-sm">
+        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500"></i> Core Web Vitals</li>
+        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500"></i> SEO Optimization</li>
+        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500"></i> Load Time Reduction</li>
+       </ul>
+      </div>
+     </div>
+    </div>
+   </section><!-- Portfolio Section -->
+   <section id="portfolio" class="py-20 px-6 bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-7xl mx-auto">
+     <div class="text-center mb-16">
+      <h2 class="text-4xl font-bold mb-4">Recent Projects</h2>
+      <div class="section-divider mx-auto"></div>
+     </div>
+     <div class="grid md:grid-cols-3 gap-8">
+      <div class="bg-white dark:bg-gray-800 rounded-lg overflow-hidden card-hover border border-gray-200 dark:border-gray-700">
+       <div class="h-48 bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center"><i data-lucide="globe" class="w-24 h-24 text-white opacity-50"></i>
+       </div>
+       <div class="p-6">
+        <h3 class="text-xl font-bold mb-2">E-Commerce Platform</h3>
+        <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">A full-featured e-commerce solution with cart, checkout, and admin dashboard.</p>
+        <div class="flex flex-wrap gap-2 mb-4"><span class="text-xs bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-3 py-1 rounded-full">React</span> <span class="text-xs bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-3 py-1 rounded-full">Node.js</span> <span class="text-xs bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-3 py-1 rounded-full">MongoDB</span>
+        </div><button onclick="openModal('project-1')" class="w-full btn-secondary py-2 rounded-lg font-semibold text-sm"> View Details </button>
+       </div>
+      </div>
+      <div class="bg-white dark:bg-gray-800 rounded-lg overflow-hidden card-hover border border-gray-200 dark:border-gray-700">
+       <div class="h-48 bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center"><i data-lucide="smartphone" class="w-24 h-24 text-white opacity-50"></i>
+       </div>
+       <div class="p-6">
+        <h3 class="text-xl font-bold mb-2">Mobile App Dashboard</h3>
+        <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">Real-time analytics dashboard for mobile app monitoring and insights.</p>
+        <div class="flex flex-wrap gap-2 mb-4"><span class="text-xs bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 px-3 py-1 rounded-full">Vue.js</span> <span class="text-xs bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 px-3 py-1 rounded-full">D3.js</span> <span class="text-xs bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 px-3 py-1 rounded-full">REST API</span>
+        </div><button onclick="openModal('project-2')" class="w-full btn-secondary py-2 rounded-lg font-semibold text-sm"> View Details </button>
+       </div>
+      </div>
+      <div class="bg-white dark:bg-gray-800 rounded-lg overflow-hidden card-hover border border-gray-200 dark:border-gray-700">
+       <div class="h-48 bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center"><i data-lucide="briefcase" class="w-24 h-24 text-white opacity-50"></i>
+       </div>
+       <div class="p-6">
+        <h3 class="text-xl font-bold mb-2">Corporate Website</h3>
+        <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">Modern, responsive corporate website with CMS integration and SEO optimization.</p>
+        <div class="flex flex-wrap gap-2 mb-4"><span class="text-xs bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 px-3 py-1 rounded-full">Next.js</span> <span class="text-xs bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 px-3 py-1 rounded-full">Headless CMS</span> <span class="text-xs bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 px-3 py-1 rounded-full">Tailwind</span>
+        </div><button onclick="openModal('project-3')" class="w-full btn-secondary py-2 rounded-lg font-semibold text-sm"> View Details </button>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Skills Section -->
+   <section id="skills" class="py-20 px-6">
+    <div class="max-w-7xl mx-auto">
+     <div class="text-center mb-16">
+      <h2 class="text-4xl font-bold mb-4">Technical Skills</h2>
+      <div class="section-divider mx-auto"></div>
+     </div>
+     <div class="grid md:grid-cols-3 gap-12">
+      <div>
+       <h3 class="text-2xl font-bold mb-8">Frontend</h3>
+       <div class="space-y-6">
+        <div>
+         <div class="flex justify-between items-center mb-2"><span class="font-semibold">HTML &amp; CSS</span> <span class="text-sm text-gray-500">95%</span>
+         </div>
+         <div class="skill-bar">
+          <div class="skill-fill" style="width: 95%"></div>
+         </div>
+        </div>
+        <div>
+         <div class="flex justify-between items-center mb-2"><span class="font-semibold">JavaScript</span> <span class="text-sm text-gray-500">92%</span>
+         </div>
+         <div class="skill-bar">
+          <div class="skill-fill" style="width: 92%"></div>
+         </div>
+        </div>
+        <div>
+         <div class="flex justify-between items-center mb-2"><span class="font-semibold">React &amp; Vue</span> <span class="text-sm text-gray-500">90%</span>
+         </div>
+         <div class="skill-bar">
+          <div class="skill-fill" style="width: 90%"></div>
+         </div>
+        </div>
+       </div>
+      </div>
+      <div>
+       <h3 class="text-2xl font-bold mb-8">Backend</h3>
+       <div class="space-y-6">
+        <div>
+         <div class="flex justify-between items-center mb-2"><span class="font-semibold">Node.js</span> <span class="text-sm text-gray-500">85%</span>
+         </div>
+         <div class="skill-bar">
+          <div class="skill-fill" style="width: 85%"></div>
+         </div>
+        </div>
+        <div>
+         <div class="flex justify-between items-center mb-2"><span class="font-semibold">PHP &amp; Laravel</span> <span class="text-sm text-gray-500">80%</span>
+         </div>
+         <div class="skill-bar">
+          <div class="skill-fill" style="width: 80%"></div>
+         </div>
+        </div>
+        <div>
+         <div class="flex justify-between items-center mb-2"><span class="font-semibold">Databases</span> <span class="text-sm text-gray-500">88%</span>
+         </div>
+         <div class="skill-bar">
+          <div class="skill-fill" style="width: 88%"></div>
+         </div>
+        </div>
+       </div>
+      </div>
+      <div>
+       <h3 class="text-2xl font-bold mb-8">Tools &amp; QA</h3>
+       <div class="space-y-6">
+        <div>
+         <div class="flex justify-between items-center mb-2"><span class="font-semibold">Testing</span> <span class="text-sm text-gray-500">93%</span>
+         </div>
+         <div class="skill-bar">
+          <div class="skill-fill" style="width: 93%"></div>
+         </div>
+        </div>
+        <div>
+         <div class="flex justify-between items-center mb-2"><span class="font-semibold">Git &amp; DevOps</span> <span class="text-sm text-gray-500">87%</span>
+         </div>
+         <div class="skill-bar">
+          <div class="skill-fill" style="width: 87%"></div>
+         </div>
+        </div>
+        <div>
+         <div class="flex justify-between items-center mb-2"><span class="font-semibold">Figma &amp; Design</span> <span class="text-sm text-gray-500">82%</span>
+         </div>
+         <div class="skill-bar">
+          <div class="skill-fill" style="width: 82%"></div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Testimonials Section -->
+   <section class="py-20 px-6 bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-7xl mx-auto">
+     <div class="text-center mb-16">
+      <h2 class="text-4xl font-bold mb-4">What Clients Say</h2>
+      <div class="section-divider mx-auto"></div>
+     </div>
+     <div class="grid md:grid-cols-3 gap-8">
+      <div class="testimonial-card">
+       <div class="flex gap-1 mb-4"><i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i> <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i> <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i> <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i> <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
+       </div>
+       <p class="text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">"Alex delivered an exceptional e-commerce platform that exceeded all our expectations. The attention to detail and code quality is outstanding!"</p>
+       <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold">
+         JD
+        </div>
+        <div>
+         <p class="font-semibold">John Davis</p>
+         <p class="text-sm text-gray-500 dark:text-gray-400">CEO, TechStart</p>
+        </div>
+       </div>
+      </div>
+      <div class="testimonial-card">
+       <div class="flex gap-1 mb-4"><i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i> <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i> <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i> <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i> <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
+       </div>
+       <p class="text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">"Professional, responsive, and always available. Alex has become our go-to partner for all frontend and QA needs. Highly recommended!"</p>
+       <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center text-white font-bold">
+         SP
+        </div>
+        <div>
+         <p class="font-semibold">Sarah Park</p>
+         <p class="text-sm text-gray-500 dark:text-gray-400">Product Manager, Digital Co.</p>
+        </div>
+       </div>
+      </div>
+      <div class="testimonial-card">
+       <div class="flex gap-1 mb-4"><i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i> <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i> <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i> <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i> <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
+       </div>
+       <p class="text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">"Exceptional work on our dashboard project. The performance improvements Alex implemented led to a 40% reduction in load times!"</p>
+       <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white font-bold">
+         MR
+        </div>
+        <div>
+         <p class="font-semibold">Mike Rodriguez</p>
+         <p class="text-sm text-gray-500 dark:text-gray-400">CTO, Data Analytics Inc.</p>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Contact Section -->
+   <section id="contact" class="py-20 px-6">
+    <div class="max-w-7xl mx-auto">
+     <div class="text-center mb-16">
+      <h2 class="text-4xl font-bold mb-4">Let's Work Together</h2>
+      <div class="section-divider mx-auto"></div>
+     </div>
+     <div class="grid md:grid-cols-2 gap-12">
+      <div>
+       <h3 class="text-2xl font-bold mb-6">Get In Touch</h3>
+       <p class="text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">Have a project in mind? I'd love to hear about it. Reach out and let's create something amazing together.</p>
+       <div class="space-y-6">
+        <div class="flex items-center gap-4">
+         <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center"><i data-lucide="mail" class="w-6 h-6 text-blue-600 dark:text-blue-400"></i>
+         </div>
+         <div>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Email</p>
+          <p class="font-semibold"><a href="mailto:alex@example.com" target="_blank">alex@example.com</a></p>
+         </div>
+        </div>
+        <div class="flex items-center gap-4">
+         <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center"><i data-lucide="phone" class="w-6 h-6 text-blue-600 dark:text-blue-400"></i>
+         </div>
+         <div>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Phone</p>
+          <p class="font-semibold">+1 (555) 123-4567</p>
+         </div>
+        </div>
+        <div class="flex items-center gap-4">
+         <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center"><i data-lucide="map-pin" class="w-6 h-6 text-blue-600 dark:text-blue-400"></i>
+         </div>
+         <div>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Location</p>
+          <p class="font-semibold">San Francisco, CA</p>
+         </div>
+        </div>
+       </div>
+       <div class="flex gap-4 mt-8"><a href="#" target="_blank" rel="noopener noreferrer" class="w-12 h-12 bg-white dark:bg-gray-800 rounded-lg flex items-center justify-center border border-gray-200 dark:border-gray-700 hover:text-blue-600 dark:hover:text-blue-400 transition"> <i data-lucide="github" class="w-6 h-6"></i> </a> <a href="#" target="_blank" rel="noopener noreferrer" class="w-12 h-12 bg-white dark:bg-gray-800 rounded-lg flex items-center justify-center border border-gray-200 dark:border-gray-700 hover:text-blue-600 dark:hover:text-blue-400 transition"> <i data-lucide="linkedin" class="w-6 h-6"></i> </a> <a href="#" target="_blank" rel="noopener noreferrer" class="w-12 h-12 bg-white dark:bg-gray-800 rounded-lg flex items-center justify-center border border-gray-200 dark:border-gray-700 hover:text-blue-600 dark:hover:text-blue-400 transition"> <i data-lucide="twitter" class="w-6 h-6"></i> </a>
+       </div>
+      </div>
+      <div class="bg-white dark:bg-gray-800 p-8 rounded-lg border border-gray-200 dark:border-gray-700">
+       <form id="contact-form" onsubmit="handleContactForm(event)">
+        <div class="mb-6"><label for="name" class="block text-sm font-semibold mb-2">Full Name</label> <input type="text" id="name" required class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Your name">
+        </div>
+        <div class="mb-6"><label for="email" class="block text-sm font-semibold mb-2">Email</label> <input type="email" id="email" required class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="your@email.com">
+        </div>
+        <div class="mb-6"><label for="message" class="block text-sm font-semibold mb-2">Message</label> <textarea id="message" required rows="6" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Tell me about your project..."></textarea>
+        </div><button type="submit" class="w-full btn-primary py-3 rounded-lg font-semibold text-white"> Send Message </button>
+       </form>
+      </div>
+     </div>
+    </div>
+   </section><!-- Footer -->
+   <footer class="bg-gray-900 dark:bg-black text-white py-12 px-6">
+    <div class="max-w-7xl mx-auto text-center">
+     <p class="text-gray-400 mb-2">© 2024 Alex Rivera. All rights reserved.</p>
+     <p class="text-sm text-gray-500">Designed &amp; built with passion</p>
+    </div>
+   </footer>
+  </div><!-- Modals -->
+  <div id="contact-modal" class="modal-overlay">
+   <div class="modal-content">
+    <div class="flex items-center justify-between mb-6">
+     <h3 class="text-2xl font-bold">Get In Touch</h3><button onclick="closeModal('contact-modal')" class="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded"> <i data-lucide="x" class="w-6 h-6"></i> </button>
+    </div>
+    <form onsubmit="handleModalContactForm(event)">
+     <div class="mb-4"><label class="block text-sm font-semibold mb-2">Full Name</label> <input type="text" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Your name">
+     </div>
+     <div class="mb-4"><label class="block text-sm font-semibold mb-2">Email</label> <input type="email" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="your@email.com">
+     </div>
+     <div class="mb-6"><label class="block text-sm font-semibold mb-2">Message</label> <textarea required rows="4" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Tell me about your project..."></textarea>
+     </div><button type="submit" class="w-full btn-primary py-2 rounded-lg font-semibold text-white"> Send Message </button>
+    </form>
+   </div>
+  </div>
+  <div id="project-1" class="modal-overlay">
+   <div class="modal-content">
+    <div class="flex items-center justify-between mb-6">
+     <h3 class="text-2xl font-bold">E-Commerce Platform</h3><button onclick="closeModal('project-1')" class="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded"> <i data-lucide="x" class="w-6 h-6"></i> </button>
+    </div>
+    <div class="h-64 bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg flex items-center justify-center mb-6"><i data-lucide="globe" class="w-32 h-32 text-white opacity-50"></i>
+    </div>
+    <p class="text-gray-600 dark:text-gray-400 mb-4 leading-relaxed">A comprehensive e-commerce platform built with React and Node.js, featuring a dynamic product catalog, shopping cart, secure checkout process, and a powerful admin dashboard for inventory management.</p>
+    <h4 class="font-semibold mb-3">Key Features:</h4>
+    <ul class="space-y-2 text-sm mb-6">
+     <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500"></i> Responsive product grid with filtering</li>
+     <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500"></i> Real-time shopping cart management</li>
+     <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500"></i> Secure payment gateway integration</li>
+     <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500"></i> Admin dashboard with analytics</li>
+     <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500"></i> User authentication and profiles</li>
+    </ul>
+    <div class="flex gap-3"><a href="#" target="_blank" rel="noopener noreferrer" class="flex-1 btn-primary py-2 rounded-lg font-semibold text-white text-center"> Live Demo </a> <a href="#" target="_blank" rel="noopener noreferrer" class="flex-1 btn-secondary py-2 rounded-lg font-semibold text-center"> GitHub Repo </a>
+    </div>
+   </div>
+  </div>
+  <div id="project-2" class="modal-overlay">
+   <div class="modal-content">
+    <div class="flex items-center justify-between mb-6">
+     <h3 class="text-2xl font-bold">Mobile App Dashboard</h3><button onclick="closeModal('project-2')" class="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded"> <i data-lucide="x" class="w-6 h-6"></i> </button>
+    </div>
+    <div class="h-64 bg-gradient-to-br from-purple-400 to-purple-600 rounded-lg flex items-center justify-center mb-6"><i data-lucide="smartphone" class="w-32 h-32 text-white opacity-50"></i>
+    </div>
+    <p class="text-gray-600 dark:text-gray-400 mb-4 leading-relaxed">A real-time analytics dashboard for mobile app monitoring. Displays user engagement metrics, crash reporting, performance analytics, and custom insights with beautiful visualizations using D3.js.</p>
+    <h4 class="font-semibold mb-3">Key Features:</h4>
+    <ul class="space-y-2 text-sm mb-6">
+     <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500"></i> Real-time data updates with WebSockets</li>
+     <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500"></i> Interactive data visualizations</li>
+     <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500"></i> Custom reporting tools</li>
+     <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500"></i> Export to CSV/PDF</li>
+     <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500"></i> Team collaboration features</li>
+    </ul>
+    <div class="flex gap-3"><a href="#" target="_blank" rel="noopener noreferrer" class="flex-1 btn-primary py-2 rounded-lg font-semibold text-white text-center"> Live Demo </a> <a href="#" target="_blank" rel="noopener noreferrer" class="flex-1 btn-secondary py-2 rounded-lg font-semibold text-center"> GitHub Repo </a>
+    </div>
+   </div>
+  </div>
+  <div id="project-3" class="modal-overlay">
+   <div class="modal-content">
+    <div class="flex items-center justify-between mb-6">
+     <h3 class="text-2xl font-bold">Corporate Website</h3><button onclick="closeModal('project-3')" class="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded"> <i data-lucide="x" class="w-6 h-6"></i> </button>
+    </div>
+    <div class="h-64 bg-gradient-to-br from-green-400 to-green-600 rounded-lg flex items-center justify-center mb-6"><i data-lucide="briefcase" class="w-32 h-32 text-white opacity-50"></i>
+    </div>
+    <p class="text-gray-600 dark:text-gray-400 mb-4 leading-relaxed">A modern, fully responsive corporate website built with Next.js and headless CMS integration. Optimized for performance, SEO, and user experience with smooth animations and intuitive navigation.</p>
+    <h4 class="font-semibold mb-3">Key Features:</h4>
+    <ul class="space-y-2 text-sm mb-6">
+     <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500"></i> Headless CMS integration</li>
+     <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500"></i> SEO optimized with structured data</li>
+     <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500"></i> Blog with markdown support</li>
+     <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500"></i> Contact forms with email integration</li>
+     <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500"></i> Mobile-first responsive design</li>
+    </ul>
+    <div class="flex gap-3"><a href="#" target="_blank" rel="noopener noreferrer" class="flex-1 btn-primary py-2 rounded-lg font-semibold text-white text-center"> Live Demo </a> <a href="#" target="_blank" rel="noopener noreferrer" class="flex-1 btn-secondary py-2 rounded-lg font-semibold text-center"> GitHub Repo </a>
+    </div>
+   </div>
+  </div><!-- Notification -->
+  <div id="notification" class="fixed top-6 right-6 bg-white dark:bg-gray-800 px-6 py-4 rounded-lg shadow-lg opacity-0 pointer-events-none transition-all z-500" style="transform: translateX(400px);">
+   <div class="flex items-center gap-3"><i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i> <span id="notification-text">Message sent successfully!</span>
+   </div>
+  </div>
+  <script>
+        let allSkillBars = [];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            allSkillBars = document.querySelectorAll('.skill-fill');
+            setupScrollIndicator();
+            setupBackToTopButton();
+        });
+
+        function toggleDarkMode() {
+            const body = document.body;
+            body.classList.toggle('dark-mode');
+            body.classList.toggle('light-mode');
+            localStorage.setItem('darkMode', body.classList.contains('dark-mode'));
+        }
+
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('active');
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('active');
+            }
+        }
+
+        // Close modal when clicking overlay
+        document.querySelectorAll('.modal-overlay').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+        });
+
+        function handleContactForm(event) {
+            event.preventDefault();
+            const form = event.target;
+            showNotification('Thank you! I\'ll get back to you soon.');
+            form.reset();
+        }
+
+        function handleModalContactForm(event) {
+            event.preventDefault();
+            const form = event.target;
+            showNotification('Thank you for your message!');
+            form.reset();
+            closeModal('contact-modal');
+        }
+
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notification-text');
+            notificationText.textContent = message;
+            notification.style.transform = 'translateX(0)';
+            notification.style.opacity = '1';
+            notification.style.pointerEvents = 'auto';
+
+            setTimeout(() => {
+                notification.style.transform = 'translateX(400px)';
+                notification.style.opacity = '0';
+                notification.style.pointerEvents = 'none';
+            }, 3000);
+        }
+
+        function setupScrollIndicator() {
+            const scrollIndicator = document.querySelector('.scroll-indicator');
+            window.addEventListener('scroll', () => {
+                const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (window.scrollY / scrollHeight) * 100;
+                scrollIndicator.style.width = scrolled + '%';
+            });
+        }
+
+        function setupBackToTopButton() {
+            const backToTop = document.querySelector('.back-to-top');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 500) {
+                    backToTop.classList.add('show');
+                } else {
+                    backToTop.classList.remove('show');
+                }
+            });
+
+            if (!backToTop.hasListener) {
+                backToTop.addEventListener('click', () => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+                backToTop.hasListener = true;
+            }
+        }
+
+        // Restore dark mode preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.remove('light-mode');
+            document.body.classList.add('dark-mode');
+        }
+    </script><!-- Back to Top Button -->
+  <div class="back-to-top"><i data-lucide="arrow-up" class="w-6 h-6"></i>
+  </div>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9e646d536341fee5',t:'MTc3NTE4MTA3NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

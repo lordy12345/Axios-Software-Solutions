@@ -1,0 +1,1312 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ModernStore - Premium E-Commerce</title>
+  <link rel="icon" type="image/x-icon" href="./resources/logo_icon.ico">
+  <link rel="shortcut icon" href="./resources/logo_icon.ico">
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #ffffff;
+    }
+
+    #app {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    main {
+      flex: 1;
+    }
+
+    footer {
+      flex-shrink: 0;
+      margin-top: auto;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    /* Animations */
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes pulse-scale {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    .slide-down {
+      animation: slideDown 0.4s ease-out;
+    }
+
+    /* Product Cards */
+    .product-card {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .product-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-image {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .product-card:hover .product-image {
+      transform: scale(1.08);
+    }
+
+    .badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: #ef4444;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .badge.new {
+      background: #3b82f6;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #1f2937;
+      color: white;
+      padding: 16px 24px;
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      animation: slideDown 0.3s ease-out;
+      z-index: 50;
+      max-width: 300px;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 40;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .modal {
+      background: white;
+      border-radius: 16px;
+      padding: 32px;
+      max-width: 500px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: slideDown 0.3s ease-out;
+    }
+
+    /* Slider */
+    .slider {
+      display: flex;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      gap: 16px;
+      padding: 16px 0;
+    }
+
+    .slider::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Buttons */
+    .btn {
+      padding: 12px 24px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      font-size: 14px;
+    }
+
+    .btn-primary {
+      background: #000000;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #1f2937;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: #f3f4f6;
+      color: #000000;
+      border: 2px solid #e5e7eb;
+    }
+
+    .btn-secondary:hover {
+      background: #e5e7eb;
+    }
+
+    .btn-small {
+      padding: 8px 16px;
+      font-size: 12px;
+    }
+
+    /* Input */
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border-color 0.3s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #000000;
+    }
+
+    /* Stars */
+    .stars {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .star {
+      color: #fbbf24;
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Cart Counter */
+    .cart-counter {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: #ef4444;
+      color: white;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* Sticky Header */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      background: white;
+    }
+
+    /* Grid */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 24px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    /* Loading Skeleton */
+    .skeleton {
+      background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+    }
+
+    @keyframes loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .grid-2 {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 16px;
+      }
+
+      .grid-3 {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 16px;
+      }
+
+      .product-image {
+        height: 200px;
+      }
+    }
+
+    /* Quantity Selector */
+    .qty-selector {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #f3f4f6;
+      border-radius: 6px;
+      padding: 4px;
+      width: fit-content;
+    }
+
+    .qty-btn {
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #6b7280;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+
+    .qty-btn:hover {
+      color: #000000;
+    }
+
+    .qty-input {
+      width: 40px;
+      text-align: center;
+      border: none;
+      background: transparent;
+      font-weight: 600;
+    }
+
+    /* Category Tags */
+    .category-tag {
+      display: inline-block;
+      padding: 8px 16px;
+      background: #f3f4f6;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #6b7280;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .category-tag.active {
+      background: #000000;
+      color: white;
+    }
+
+    .category-tag:hover {
+      background: #e5e7eb;
+    }
+
+    .category-tag.active:hover {
+      background: #1f2937;
+    }
+
+    /* Advanced Filters */
+    .filter-section {
+      padding: 16px;
+      border-bottom: 1px solid #e5e7eb;
+      transition: all 0.3s ease;
+    }
+
+    .filter-section:last-child {
+      border-bottom: none;
+    }
+
+    .filter-title {
+      font-weight: 700;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #1f2937;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .filter-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .filter-option:hover {
+      transform: translateX(4px);
+    }
+
+    .filter-option input[type="radio"],
+    .filter-option input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: #000000;
+    }
+
+    .filter-option label {
+      flex: 1;
+      cursor: pointer;
+      font-size: 14px;
+      color: #4b5563;
+      transition: color 0.2s ease;
+    }
+
+    .filter-option:hover label {
+      color: #000000;
+    }
+
+    .filter-option input:checked ~ label {
+      color: #000000;
+      font-weight: 600;
+    }
+
+    .price-range {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin: 12px 0;
+    }
+
+    .price-range input {
+      width: 60px;
+      padding: 8px;
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
+      text-align: center;
+    }
+
+    /* Lightbox Gallery */
+    .lightbox-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.95);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 60;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .lightbox-overlay.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .lightbox-content {
+      position: relative;
+      max-width: 90vw;
+      max-height: 90vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lightbox-image {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      z-index: 70;
+    }
+
+    .lightbox-close:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.1);
+    }
+
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      z-index: 70;
+    }
+
+    .lightbox-nav:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .lightbox-nav.prev {
+      left: 20px;
+    }
+
+    .lightbox-nav.next {
+      right: 20px;
+    }
+
+    .image-gallery {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .gallery-thumbnail {
+      width: 100%;
+      aspect-ratio: 1;
+      background: #f3f4f6;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .gallery-thumbnail:hover {
+      border-color: #000000;
+    }
+
+    .gallery-thumbnail img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
+ </head>
+ <body>
+  <div id="app">
+   <!-- Header -->
+   <header class="bg-white border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <div class="flex items-center justify-between h-16">
+      <!-- Logo -->
+      <div class="flex-shrink-0">
+       <button onclick="navigateTo('home')" class="text-2xl font-bold text-black cursor-pointer hover:text-gray-700 transition"> ModernStore </button>
+      </div><!-- Navigation -->
+      <nav class="hidden md:flex gap-8">
+       <button onclick="navigateTo('home')" class="text-gray-600 hover:text-black transition font-500">Home</button> <button onclick="navigateTo('shop')" class="text-gray-600 hover:text-black transition font-500">Shop</button> <button onclick="navigateTo('about')" class="text-gray-600 hover:text-black transition font-500">About</button> <button onclick="navigateTo('contact')" class="text-gray-600 hover:text-black transition font-500">Contact</button>
+      </nav><!-- Right Actions -->
+      <div class="flex items-center gap-4">
+       <button onclick="toggleSearch()" class="p-2 hover:bg-gray-100 rounded-lg transition"> <i data-lucide="search" class="w-5 h-5 text-gray-600"></i> </button> <button onclick="toggleCart()" class="relative p-2 hover:bg-gray-100 rounded-lg transition"> <i data-lucide="shopping-cart" class="w-5 h-5 text-gray-600"></i> <span class="cart-counter" id="cartCount">0</span> </button> <button onclick="toggleMenu()" class="md:hidden p-2 hover:bg-gray-100 rounded-lg transition"> <i data-lucide="menu" class="w-5 h-5 text-gray-600"></i> </button>
+      </div>
+     </div><!-- Search Bar (Hidden by default) -->
+     <div id="searchBar" class="hidden pb-4">
+      <input type="text" id="searchInput" placeholder="Search products..." class="w-full" onkeyup="handleSearch()">
+     </div>
+    </div>
+   </header><!-- Main Content -->
+   <main>
+    <!-- Home Page -->
+    <div id="home" class="page active fade-in">
+     <!-- Hero Banner -->
+     <section class="bg-gradient-to-r from-gray-900 to-gray-800 text-white py-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+       <h1 class="text-5xl md:text-6xl font-bold mb-6">Discover Premium Quality</h1>
+       <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">Curated collection of the finest products for your lifestyle</p><button onclick="navigateTo('shop')" class="btn btn-primary text-lg">Shop Now</button>
+      </div>
+     </section><!-- Promo Banner -->
+     <section class="bg-amber-50 py-8 border-b border-amber-200">
+      <div class="max-w-7xl mx-auto px-4 text-center">
+       <p class="text-amber-900 font-600">🎉 Limited Time: Get 20% off on all new arrivals with code <span class="font-bold">FRESH20</span></p>
+      </div>
+     </section><!-- Featured Products -->
+     <section class="py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+       <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold mb-4">Featured Products</h2>
+        <p class="text-gray-600 text-lg">Handpicked selections for you</p>
+       </div>
+       <div class="grid-3" id="featuredProducts"></div>
+      </div>
+     </section><!-- Categories -->
+     <section class="bg-gray-50 py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+       <h2 class="text-3xl font-bold mb-12 text-center">Shop by Category</h2>
+       <div class="grid grid-cols-2 md:grid-cols-4 gap-6" id="categoriesHome"></div>
+      </div>
+     </section><!-- Testimonials -->
+     <section class="py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+       <h2 class="text-3xl font-bold mb-12 text-center">What Our Customers Say</h2>
+       <div class="grid-2">
+        <div class="bg-white p-8 border border-gray-200 rounded-lg">
+         <div class="flex gap-1 mb-4">
+          <i data-lucide="star" class="star"></i> <i data-lucide="star" class="star"></i> <i data-lucide="star" class="star"></i> <i data-lucide="star" class="star"></i> <i data-lucide="star" class="star"></i>
+         </div>
+         <p class="text-gray-700 mb-4">"Amazing quality and fast shipping. Highly recommend ModernStore!"</p>
+         <p class="font-600">Sarah Johnson</p>
+        </div>
+        <div class="bg-white p-8 border border-gray-200 rounded-lg">
+         <div class="flex gap-1 mb-4">
+          <i data-lucide="star" class="star"></i> <i data-lucide="star" class="star"></i> <i data-lucide="star" class="star"></i> <i data-lucide="star" class="star"></i> <i data-lucide="star" class="star"></i>
+         </div>
+         <p class="text-gray-700 mb-4">"Best online shopping experience. Great prices and excellent customer service."</p>
+         <p class="font-600">Michael Chen</p>
+        </div>
+       </div>
+      </div>
+     </section>
+    </div><!-- Shop Page -->
+    <div id="shop" class="page fade-in">
+     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <h1 class="text-4xl font-bold mb-12">Our Collection</h1>
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+       <!-- Filters Sidebar -->
+       <div class="lg:col-span-1">
+        <div class="sticky top-24 bg-white border border-gray-200 rounded-lg overflow-hidden">
+         <h3 class="font-bold text-lg px-4 py-4 border-b border-gray-200 bg-gray-50">Filters</h3><!-- Category Filter -->
+         <div class="filter-section">
+          <h4 class="filter-title">Category</h4>
+          <div class="space-y-0"><label class="filter-option"> <input type="radio" name="category" value="all" checked onchange="filterProducts()"> <label style="margin: 0;">All Products</label> </label> <label class="filter-option"> <input type="radio" name="category" value="Electronics" onchange="filterProducts()"> <label style="margin: 0;">Electronics</label> </label> <label class="filter-option"> <input type="radio" name="category" value="Fashion" onchange="filterProducts()"> <label style="margin: 0;">Fashion</label> </label> <label class="filter-option"> <input type="radio" name="category" value="Home" onchange="filterProducts()"> <label style="margin: 0;">Home</label> </label>
+          </div>
+         </div><!-- Price Filter -->
+         <div class="filter-section">
+          <h4 class="filter-title">Price Range</h4>
+          <div class="space-y-0"><label class="filter-option"> <input type="checkbox" value="0-50" onchange="filterProducts()"> <label style="margin: 0;">$0 - $50</label> </label> <label class="filter-option"> <input type="checkbox" value="50-150" onchange="filterProducts()"> <label style="margin: 0;">$50 - $150</label> </label> <label class="filter-option"> <input type="checkbox" value="150-500" onchange="filterProducts()"> <label style="margin: 0;">$150 - $500</label> </label> <label class="filter-option"> <input type="checkbox" value="500+" onchange="filterProducts()"> <label style="margin: 0;">$500+</label> </label>
+          </div>
+         </div><!-- Sorting -->
+         <div class="filter-section">
+          <h4 class="filter-title">Sort By</h4><select onchange="sortProducts(this.value)" class="bg-white border border-gray-200 w-full"> <option value="newest">Newest</option> <option value="price-low">Price: Low to High</option> <option value="price-high">Price: High to Low</option> <option value="popular">Most Popular</option> </select>
+         </div>
+        </div>
+       </div><!-- Products Grid -->
+       <div class="lg:col-span-3">
+        <div class="grid-3" id="productsGrid"></div>
+       </div>
+      </div>
+     </div>
+    </div><!-- Product Details Page -->
+    <div id="product-detail" class="page fade-in">
+     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <button onclick="navigateTo('shop')" class="mb-8 flex items-center gap-2 text-gray-600 hover:text-black transition"> <i data-lucide="arrow-left" class="w-5 h-5"></i> Back to Shop </button>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12" id="detailContent"></div><!-- Lightbox Gallery -->
+      <div class="lightbox-overlay" id="lightbox"><button class="lightbox-close" onclick="closeLightbox()"><i data-lucide="x" class="w-6 h-6"></i></button> <button class="lightbox-nav prev" onclick="previousImage()"><i data-lucide="chevron-left" class="w-6 h-6"></i></button>
+       <div class="lightbox-content"><img id="lightboxImage" src="" alt="" class="lightbox-image">
+       </div><button class="lightbox-nav next" onclick="nextImage()"><i data-lucide="chevron-right" class="w-6 h-6"></i></button>
+      </div>
+     </div>
+    </div><!-- Cart Page -->
+    <div id="cart" class="page fade-in">
+     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <h1 class="text-4xl font-bold mb-12">Shopping Cart</h1>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+       <!-- Cart Items -->
+       <div class="lg:col-span-2">
+        <div id="cartItems"></div>
+       </div><!-- Cart Summary -->
+       <div class="bg-gray-50 p-8 rounded-lg h-fit sticky top-24">
+        <h3 class="text-xl font-bold mb-6">Order Summary</h3>
+        <div class="space-y-4 mb-6 pb-6 border-b">
+         <div class="flex justify-between">
+          <span class="text-gray-600">Subtotal</span> <span id="subtotal" class="font-600">$0</span>
+         </div>
+         <div class="flex justify-between">
+          <span class="text-gray-600">Shipping</span> <span id="shipping" class="font-600">$10</span>
+         </div>
+         <div class="flex justify-between">
+          <span class="text-gray-600">Tax</span> <span id="tax" class="font-600">$0</span>
+         </div>
+        </div>
+        <div class="flex justify-between mb-8 text-xl">
+         <span class="font-bold">Total</span> <span id="total" class="font-bold">$0</span>
+        </div><button onclick="navigateTo('checkout')" class="btn btn-primary w-full mb-3">Proceed to Checkout</button> <button onclick="navigateTo('shop')" class="btn btn-secondary w-full">Continue Shopping</button>
+       </div>
+      </div>
+     </div>
+    </div><!-- Checkout Page -->
+    <div id="checkout" class="page fade-in">
+     <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <h1 class="text-4xl font-bold mb-12">Checkout</h1>
+      <div class="bg-white border border-gray-200 rounded-lg p-8">
+       <form onsubmit="submitOrder(event)">
+        <!-- Billing Information -->
+        <div class="mb-12">
+         <h2 class="text-2xl font-bold mb-6">Billing Information</h2>
+         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <input type="text" placeholder="First Name" required> <input type="text" placeholder="Last Name" required>
+         </div>
+         <div class="grid grid-cols-1 gap-6 mt-6">
+          <input type="email" placeholder="Email Address" required> <input type="tel" placeholder="Phone Number" required> <input type="text" placeholder="Street Address" required>
+         </div>
+         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+          <input type="text" placeholder="City" required> <input type="text" placeholder="State" required> <input type="text" placeholder="ZIP Code" required>
+         </div>
+        </div><!-- Payment Method -->
+        <div class="mb-12 pb-12 border-b">
+         <h2 class="text-2xl font-bold mb-6">Payment Method</h2>
+         <div class="space-y-3">
+          <label class="flex items-center gap-3 p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition has-[:checked]:border-black has-[:checked]:bg-gray-50"> <input type="radio" name="payment" value="card" checked class="w-4 h-4 accent-black"> <span class="font-600">Credit Card</span> </label> <label class="flex items-center gap-3 p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition has-[:checked]:border-black has-[:checked]:bg-gray-50"> <input type="radio" name="payment" value="cod" class="w-4 h-4 accent-black"> <span class="font-600">Cash on Delivery</span> </label>
+         </div>
+        </div><!-- Order Summary -->
+        <div class="mb-12 pb-12 border-b">
+         <h2 class="text-2xl font-bold mb-6">Order Summary</h2>
+         <div id="checkoutSummary"></div>
+        </div><!-- Submit --> <button type="submit" class="btn btn-primary w-full text-lg">Place Order</button>
+       </form>
+      </div>
+     </div>
+    </div><!-- About Page -->
+    <div id="about" class="page fade-in">
+     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <h1 class="text-5xl font-bold mb-8">About ModernStore</h1>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
+       <div>
+        <h2 class="text-3xl font-bold mb-6">Our Story</h2>
+        <p class="text-gray-700 text-lg leading-relaxed mb-4">Founded in 2020, ModernStore began with a simple mission: to bring curated, premium products to customers worldwide with exceptional service and competitive pricing.</p>
+        <p class="text-gray-700 text-lg leading-relaxed">We believe that quality products should be accessible to everyone. Today, we serve thousands of satisfied customers and continue to grow our collection daily.</p>
+       </div>
+       <div class="bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg p-12 text-white flex flex-col justify-center">
+        <div class="text-4xl font-bold mb-2">
+         50K+
+        </div>
+        <p class="text-gray-300 mb-8">Happy Customers</p>
+        <div class="text-4xl font-bold mb-2">
+         100K+
+        </div>
+        <p class="text-gray-300">Products Sold</p>
+       </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+       <div class="text-center">
+        <div class="mb-4 flex justify-center">
+         <i data-lucide="heart" class="w-12 h-12 text-red-500"></i>
+        </div>
+        <h3 class="font-bold text-xl mb-3">Customer First</h3>
+        <p class="text-gray-600">Your satisfaction is our top priority. We stand behind every product.</p>
+       </div>
+       <div class="text-center">
+        <div class="mb-4 flex justify-center">
+         <i data-lucide="zap" class="w-12 h-12 text-yellow-500"></i>
+        </div>
+        <h3 class="font-bold text-xl mb-3">Fast &amp; Reliable</h3>
+        <p class="text-gray-600">Quick processing and reliable shipping to get you your items fast.</p>
+       </div>
+       <div class="text-center">
+        <div class="mb-4 flex justify-center">
+         <i data-lucide="shield" class="w-12 h-12 text-green-500"></i>
+        </div>
+        <h3 class="font-bold text-xl mb-3">Secure &amp; Safe</h3>
+        <p class="text-gray-600">Your data is protected with industry-leading security measures.</p>
+       </div>
+      </div>
+     </div>
+    </div><!-- Contact Page -->
+    <div id="contact" class="page fade-in">
+     <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <h1 class="text-5xl font-bold mb-12 text-center">Get in Touch</h1>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
+       <div>
+        <h2 class="text-2xl font-bold mb-6">Contact Information</h2>
+        <div class="space-y-6">
+         <div class="flex gap-4">
+          <i data-lucide="mail" class="w-6 h-6 text-black flex-shrink-0 mt-1"></i>
+          <div>
+           <p class="font-600">Email</p>
+           <p class="text-gray-600">support@modernstore.com</p>
+          </div>
+         </div>
+         <div class="flex gap-4">
+          <i data-lucide="phone" class="w-6 h-6 text-black flex-shrink-0 mt-1"></i>
+          <div>
+           <p class="font-600">Phone</p>
+           <p class="text-gray-600">+1 (555) 123-4567</p>
+          </div>
+         </div>
+         <div class="flex gap-4">
+          <i data-lucide="map-pin" class="w-6 h-6 text-black flex-shrink-0 mt-1"></i>
+          <div>
+           <p class="font-600">Address</p>
+           <p class="text-gray-600">123 Commerce Street, San Francisco, CA 94102</p>
+          </div>
+         </div>
+        </div>
+       </div>
+       <form onsubmit="submitContact(event)" class="space-y-6">
+        <input type="text" placeholder="Your Name" required> <input type="email" placeholder="Your Email" required> <input type="text" placeholder="Subject" required> <textarea placeholder="Your Message" rows="5" required></textarea> <button type="submit" class="btn btn-primary w-full">Send Message</button>
+       </form>
+      </div>
+     </div>
+    </div>
+   </main><!-- Footer -->
+   <footer class="bg-gray-900 text-gray-300 py-20 mt-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+      <div>
+       <h3 class="text-white font-bold mb-4">ModernStore</h3>
+       <p class="text-sm">Premium quality products for modern living.</p>
+      </div>
+      <div>
+       <h4 class="text-white font-bold mb-4">Shop</h4>
+       <ul class="space-y-2 text-sm">
+        <li><button onclick="navigateTo('shop')" class="hover:text-white transition">All Products</button></li>
+        <li><button onclick="navigateTo('shop')" class="hover:text-white transition">New Arrivals</button></li>
+        <li><button onclick="navigateTo('shop')" class="hover:text-white transition">Best Sellers</button></li>
+       </ul>
+      </div>
+      <div>
+       <h4 class="text-white font-bold mb-4">Company</h4>
+       <ul class="space-y-2 text-sm">
+        <li><button onclick="navigateTo('about')" class="hover:text-white transition">About Us</button></li>
+        <li><button onclick="navigateTo('contact')" class="hover:text-white transition">Contact</button></li>
+        <li><a href="#" class="hover:text-white transition">Careers</a></li>
+       </ul>
+      </div>
+      <div>
+       <h4 class="text-white font-bold mb-4">Follow Us</h4>
+       <div class="flex gap-4">
+        <button class="hover:text-white transition"><i data-lucide="facebook" class="w-5 h-5"></i></button> <button class="hover:text-white transition"><i data-lucide="twitter" class="w-5 h-5"></i></button> <button class="hover:text-white transition"><i data-lucide="instagram" class="w-5 h-5"></i></button>
+       </div>
+      </div>
+     </div>
+     <div class="border-t border-gray-800 pt-8 text-center text-sm">
+      <p>© 2024 ModernStore. All rights reserved.</p>
+     </div>
+    </div>
+   </footer>
+  </div>
+  <script>
+    // Mock Product Data
+    const products = [
+      { id: 1, name: 'Premium Wireless Headphones', price: 199.99, category: 'Electronics', image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop', rating: 4.8, reviews: 324, isNew: true, description: 'High-quality wireless headphones with noise cancellation and 30-hour battery life.' },
+      { id: 2, name: 'Luxury Leather Watch', price: 349.99, category: 'Fashion', image: 'https://images.unsplash.com/photo-1523170335684-f042b4ef62e0?w=400&h=400&fit=crop', rating: 4.9, reviews: 412, isSale: true, description: 'Elegant leather watch with Swiss movement and water resistance.' },
+      { id: 3, name: 'Ceramic Coffee Set', price: 89.99, category: 'Home', image: 'https://images.unsplash.com/photo-1491841573634-28fb1df537d0?w=400&h=400&fit=crop', rating: 4.7, reviews: 198, description: 'Beautiful ceramic coffee set with matching cups and saucers.' },
+      { id: 4, name: '4K Webcam Pro', price: 159.99, category: 'Electronics', image: 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400&h=400&fit=crop', rating: 4.6, reviews: 287, description: '4K webcam with auto-focus and built-in microphone.' },
+      { id: 5, name: 'Cashmere Sweater', price: 129.99, category: 'Fashion', image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop', rating: 4.8, reviews: 156, isNew: true, description: 'Premium cashmere sweater, incredibly soft and comfortable.' },
+      { id: 6, name: 'Minimalist Desk Lamp', price: 79.99, category: 'Home', image: 'https://images.unsplash.com/photo-1565636192335-14f0c1aaea1d?w=400&h=400&fit=crop', rating: 4.5, reviews: 203, description: 'Modern LED desk lamp with adjustable brightness.' },
+      { id: 7, name: 'Portable SSD 1TB', price: 129.99, category: 'Electronics', image: 'https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=400&h=400&fit=crop', rating: 4.9, reviews: 521, isSale: true, description: 'Fast portable SSD with 1TB storage capacity.' },
+      { id: 8, name: 'Designer Sunglasses', price: 199.99, category: 'Fashion', image: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&h=400&fit=crop', rating: 4.7, reviews: 289, description: 'UV-protected designer sunglasses with premium frame.' },
+      { id: 9, name: 'Ergonomic Office Chair', price: 299.99, category: 'Home', image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=400&fit=crop', rating: 4.8, reviews: 445, description: 'Comfortable ergonomic office chair with lumbar support.' },
+      { id: 10, name: 'Mechanical Keyboard', price: 159.99, category: 'Electronics', image: 'https://images.unsplash.com/photo-1587829191301-dc798b83add3?w=400&h=400&fit=crop', rating: 4.9, reviews: 612, isNew: true, description: 'Premium mechanical keyboard with RGB lighting.' },
+      { id: 11, name: 'Canvas Backpack', price: 89.99, category: 'Fashion', image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=400&fit=crop', rating: 4.6, reviews: 178, description: 'Durable canvas backpack perfect for travel and work.' },
+      { id: 12, name: 'Indoor Plant Collection', price: 49.99, category: 'Home', image: 'https://images.unsplash.com/photo-1585399689266-cfb1d9ad0db8?w=400&h=400&fit=crop', rating: 4.5, reviews: 234, description: 'Set of 3 beautiful indoor plants for home decoration.' }
+    ];
+
+    // State
+    let cart = [];
+    let currentSort = 'newest';
+    let currentCategory = 'all';
+    let currentPrices = [];
+
+    // Initialize
+    function init() {
+      renderFeaturedProducts();
+      renderCategories();
+      renderProducts();
+      updateCartCount();
+      lucide.createIcons();
+    }
+
+    // Render Featured Products
+    function renderFeaturedProducts() {
+      const featured = products.slice(0, 6);
+      const html = featured.map(p => createProductCard(p)).join('');
+      document.getElementById('featuredProducts').innerHTML = html;
+    }
+
+    // Render Categories
+    function renderCategories() {
+      const categories = ['Electronics', 'Fashion', 'Home'];
+      const html = categories.map(cat => `
+        <button onclick="navigateTo('shop')" class="bg-white p-6 rounded-lg border border-gray-200 hover:border-black transition text-center font-600">
+          ${cat}
+        </button>
+      `).join('');
+      document.getElementById('categoriesHome').innerHTML = html;
+    }
+
+    // Create Product Card
+    function createProductCard(product) {
+      return `
+        <div class="product-card bg-white border border-gray-200">
+          <div class="relative overflow-hidden bg-gray-100">
+            <img src="${product.image}" alt="${product.name}" class="product-image" loading="lazy" onerror="this.style.background='#e5e7eb'; this.alt='Image unavailable';">
+            ${product.isNew ? '<div class="badge new">New</div>' : ''}
+            ${product.isSale ? '<div class="badge">Sale</div>' : ''}
+          </div>
+          <div class="p-6">
+            <h3 class="font-bold mb-2 line-clamp-2">${product.name}</h3>
+            <div class="flex items-center gap-2 mb-4">
+              <div class="flex gap-1">
+                ${Array(5).fill().map((_, i) => `<i data-lucide="star" class="star" style="opacity: ${i < Math.floor(product.rating) ? 1 : 0.3}"></i>`).join('')}
+              </div>
+              <span class="text-sm text-gray-600">(${product.reviews})</span>
+            </div>
+            <p class="text-2xl font-bold mb-4">$${product.price.toFixed(2)}</p>
+            <div class="flex gap-2">
+              <button onclick="addToCart(${product.id})" class="flex-1 btn btn-primary btn-small">Add to Cart</button>
+              <button onclick="viewProduct(${product.id})" class="flex-1 btn btn-secondary btn-small">View</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Render Products
+    function renderProducts() {
+      let filtered = products;
+
+      // Category filter
+      if (currentCategory !== 'all') {
+        filtered = filtered.filter(p => p.category === currentCategory);
+      }
+
+      // Price filter
+      if (currentPrices.length > 0) {
+        filtered = filtered.filter(p => {
+          return currentPrices.some(range => {
+            if (range === '0-50') return p.price <= 50;
+            if (range === '50-150') return p.price > 50 && p.price <= 150;
+            if (range === '150-500') return p.price > 150 && p.price <= 500;
+            if (range === '500+') return p.price > 500;
+          });
+        });
+      }
+
+      // Sort
+      if (currentSort === 'price-low') {
+        filtered.sort((a, b) => a.price - b.price);
+      } else if (currentSort === 'price-high') {
+        filtered.sort((a, b) => b.price - a.price);
+      } else if (currentSort === 'popular') {
+        filtered.sort((a, b) => b.reviews - a.reviews);
+      }
+
+      const html = filtered.map(p => createProductCard(p)).join('');
+      document.getElementById('productsGrid').innerHTML = html || '<p class="col-span-full text-center text-gray-600">No products found</p>';
+      lucide.createIcons();
+    }
+
+    // Filter Products
+    function filterProducts() {
+      currentCategory = document.querySelector('input[name="category"]:checked').value;
+      currentPrices = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(el => el.value);
+      renderProducts();
+    }
+
+    // Sort Products
+    function sortProducts(sort) {
+      currentSort = sort;
+      renderProducts();
+    }
+
+    // View Product
+    function viewProduct(id) {
+      const product = products.find(p => p.id === id);
+      const relatedProducts = products.filter(p => p.category === product.category && p.id !== id).slice(0, 4);
+      
+      // Create multiple gallery images from the same product image
+      const galleryImages = [product.image, product.image, product.image];
+      window.currentGalleryImages = galleryImages;
+      window.currentGalleryIndex = 0;
+
+      const html = `
+        <div class="md:col-span-1">
+          <div class="image-gallery">
+            <div class="gallery-thumbnail" onclick="openLightbox(0)">
+              <img src="${product.image}" alt="${product.name}" loading="lazy" onerror="this.style.background='#e5e7eb';">
+            </div>
+            <div class="gallery-thumbnail" onclick="openLightbox(1)">
+              <img src="${product.image}" alt="${product.name}" loading="lazy" onerror="this.style.background='#e5e7eb';">
+            </div>
+            <div class="gallery-thumbnail" onclick="openLightbox(2)">
+              <img src="${product.image}" alt="${product.name}" loading="lazy" onerror="this.style.background='#e5e7eb';">
+            </div>
+          </div>
+        </div>
+        <div class="md:col-span-1">
+          <div class="mb-6">
+            <span class="text-sm font-600 text-gray-600 uppercase">${product.category}</span>
+            <h1 class="text-4xl font-bold mb-4">${product.name}</h1>
+            <div class="flex items-center gap-4 mb-4">
+              <div class="flex gap-1">
+                ${Array(5).fill().map((_, i) => `<i data-lucide="star" class="star" style="opacity: ${i < Math.floor(product.rating) ? 1 : 0.3}"></i>`).join('')}
+              </div>
+              <span class="text-gray-600">${product.rating} (${product.reviews} reviews)</span>
+            </div>
+            <p class="text-4xl font-bold mb-6">$${product.price.toFixed(2)}</p>
+            <p class="text-gray-700 mb-8 leading-relaxed">${product.description}</p>
+          </div>
+
+          <div class="bg-gray-50 p-6 rounded-lg mb-6">
+            <h3 class="font-bold mb-4">Specifications</h3>
+            <ul class="space-y-3 text-sm text-gray-600">
+              <li class="flex justify-between"><span>Category:</span> <span>${product.category}</span></li>
+              <li class="flex justify-between"><span>Availability:</span> <span class="text-green-600">In Stock</span></li>
+              <li class="flex justify-between"><span>Warranty:</span> <span>1 Year</span></li>
+              <li class="flex justify-between"><span>Shipping:</span> <span>Free Shipping</span></li>
+            </ul>
+          </div>
+
+          <div class="mb-6">
+            <label class="block text-sm font-600 mb-3">Quantity</label>
+            <div class="qty-selector">
+              <button class="qty-btn" onclick="this.nextElementSibling.value = Math.max(1, this.nextElementSibling.value - 1)">−</button>
+              <input type="number" class="qty-input" value="1" min="1">
+              <button class="qty-btn" onclick="this.previousElementSibling.value = parseInt(this.previousElementSibling.value) + 1">+</button>
+            </div>
+          </div>
+
+          <button onclick="addToCartFromDetail(${product.id})" class="btn btn-primary w-full mb-3 py-3">Add to Cart</button>
+          <button onclick="navigateTo('shop')" class="btn btn-secondary w-full py-3">Back to Shop</button>
+
+          ${product.isNew ? '<div class="mt-4 p-4 bg-blue-50 text-blue-900 rounded-lg text-sm font-600">✨ New Arrival - Popular Choice</div>' : ''}
+          ${product.isSale ? '<div class="mt-2 p-4 bg-red-50 text-red-900 rounded-lg text-sm font-600">🎉 Limited Time Sale</div>' : ''}
+        </div>
+
+        <div class="md:col-span-3 mt-12 pt-12 border-t">
+          <h2 class="text-2xl font-bold mb-8">Related Products</h2>
+          <div class="grid-3">
+            ${relatedProducts.map(p => createProductCard(p)).join('')}
+          </div>
+        </div>
+      `;
+
+      document.getElementById('detailContent').innerHTML = html;
+      navigateTo('product-detail');
+      lucide.createIcons();
+    }
+
+    // Lightbox functions
+    function openLightbox(index) {
+      window.currentGalleryIndex = index;
+      const lightbox = document.getElementById('lightbox');
+      const image = document.getElementById('lightboxImage');
+      image.src = window.currentGalleryImages[index];
+      lightbox.classList.add('active');
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('active');
+    }
+
+    function nextImage() {
+      window.currentGalleryIndex = (window.currentGalleryIndex + 1) % window.currentGalleryImages.length;
+      document.getElementById('lightboxImage').src = window.currentGalleryImages[window.currentGalleryIndex];
+    }
+
+    function previousImage() {
+      window.currentGalleryIndex = (window.currentGalleryIndex - 1 + window.currentGalleryImages.length) % window.currentGalleryImages.length;
+      document.getElementById('lightboxImage').src = window.currentGalleryImages[window.currentGalleryIndex];
+    }
+
+    // Close lightbox on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowRight') nextImage();
+      if (e.key === 'ArrowLeft') previousImage();
+    });
+
+    // Add to Cart
+    function addToCart(id) {
+      const product = products.find(p => p.id === id);
+      const existing = cart.find(p => p.id === id);
+
+      if (existing) {
+        existing.quantity++;
+      } else {
+        cart.push({ ...product, quantity: 1 });
+      }
+
+      updateCartCount();
+      showToast(`${product.name} added to cart!`);
+    }
+
+    // Add to Cart from Detail
+    function addToCartFromDetail(id) {
+      const qty = parseInt(document.querySelector('.qty-input').value) || 1;
+      const product = products.find(p => p.id === id);
+      const existing = cart.find(p => p.id === id);
+
+      if (existing) {
+        existing.quantity += qty;
+      } else {
+        cart.push({ ...product, quantity: qty });
+      }
+
+      updateCartCount();
+      showToast(`${qty}x ${product.name} added to cart!`);
+    }
+
+    // Update Cart Count
+    function updateCartCount() {
+      const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+      document.getElementById('cartCount').textContent = count;
+      renderCart();
+      updateCartSummary();
+    }
+
+    // Render Cart
+    function renderCart() {
+      const html = cart.length === 0 
+        ? '<div class="text-center py-12"><p class="text-gray-600 text-lg mb-4">Your cart is empty</p><button onclick="navigateTo(\'shop\')" class="btn btn-primary">Continue Shopping</button></div>'
+        : cart.map(item => `
+            <div class="bg-white border border-gray-200 rounded-lg p-6 mb-4 flex gap-6">
+              <img src="${item.image}" alt="${item.name}" class="w-24 h-24 object-cover rounded-lg" loading="lazy">
+              <div class="flex-1">
+                <h3 class="font-bold text-lg mb-1">${item.name}</h3>
+                <p class="text-gray-600 mb-4">$${item.price.toFixed(2)}</p>
+                <div class="qty-selector">
+                  <button class="qty-btn" onclick="updateQuantity(${item.id}, ${item.quantity - 1})">−</button>
+                  <span class="qty-input" style="text-align: center; flex: 1; border: none; background: transparent;">${item.quantity}</span>
+                  <button class="qty-btn" onclick="updateQuantity(${item.id}, ${item.quantity + 1})">+</button>
+                </div>
+              </div>
+              <div class="text-right">
+                <p class="font-bold mb-4">$${(item.price * item.quantity).toFixed(2)}</p>
+                <button onclick="removeFromCart(${item.id})" class="text-red-600 hover:text-red-700 font-600 flex items-center gap-2">
+                  <i data-lucide="trash-2" class="w-4 h-4"></i> Remove
+                </button>
+              </div>
+            </div>
+          `).join('');
+
+      document.getElementById('cartItems').innerHTML = html;
+      lucide.createIcons();
+    }
+
+    // Update Quantity
+    function updateQuantity(id, qty) {
+      if (qty <= 0) {
+        removeFromCart(id);
+      } else {
+        const item = cart.find(p => p.id === id);
+        if (item) {
+          item.quantity = qty;
+          updateCartCount();
+        }
+      }
+    }
+
+    // Remove from Cart
+    function removeFromCart(id) {
+      cart = cart.filter(p => p.id !== id);
+      updateCartCount();
+      showToast('Item removed from cart');
+    }
+
+    // Update Cart Summary
+    function updateCartSummary() {
+      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      const shipping = cart.length > 0 ? 10 : 0;
+      const tax = subtotal * 0.08;
+      const total = subtotal + shipping + tax;
+
+      document.getElementById('subtotal').textContent = '$' + subtotal.toFixed(2);
+      document.getElementById('tax').textContent = '$' + tax.toFixed(2);
+      document.getElementById('total').textContent = '$' + total.toFixed(2);
+
+      // Checkout summary
+      const checkoutHtml = `
+        ${cart.map(item => `
+          <div class="flex justify-between mb-4 pb-4 border-b">
+            <div>
+              <p class="font-600">${item.name}</p>
+              <p class="text-sm text-gray-600">Qty: ${item.quantity}</p>
+            </div>
+            <p class="font-600">$${(item.price * item.quantity).toFixed(2)}</p>
+          </div>
+        `).join('')}
+        <div class="space-y-3 mb-4">
+          <div class="flex justify-between">
+            <span>Subtotal</span>
+            <span class="font-600">$${subtotal.toFixed(2)}</span>
+          </div>
+          <div class="flex justify-between">
+            <span>Shipping</span>
+            <span class="font-600">$${shipping.toFixed(2)}</span>
+          </div>
+          <div class="flex justify-between">
+            <span>Tax</span>
+            <span class="font-600">$${tax.toFixed(2)}</span>
+          </div>
+        </div>
+        <div class="flex justify-between text-xl font-bold pt-4 border-t">
+          <span>Total</span>
+          <span>$${total.toFixed(2)}</span>
+        </div>
+      `;
+      document.getElementById('checkoutSummary').innerHTML = checkoutHtml;
+    }
+
+    // Navigation
+    function navigateTo(page) {
+      document.querySelectorAll('.page').forEach(p => {
+        p.classList.remove('active', 'fade-in');
+      });
+      setTimeout(() => {
+        document.getElementById(page).classList.add('active', 'fade-in');
+      }, 0);
+      window.scrollTo(0, 0);
+    }
+
+    // Submit Order
+    function submitOrder(e) {
+      e.preventDefault();
+      if (cart.length === 0) {
+        showToast('Cart is empty!');
+        return;
+      }
+      showModal('✅ Order Placed Successfully!', 'Thank you for your order. You will receive an email confirmation shortly. Your order number is <strong>#' + Math.random().toString(36).substr(2, 9).toUpperCase() + '</strong>');
+      cart = [];
+      updateCartCount();
+      setTimeout(() => navigateTo('home'), 2000);
+    }
+
+    // Submit Contact
+    function submitContact(e) {
+      e.preventDefault();
+      showToast('Message sent! We\'ll get back to you soon.');
+      e.target.reset();
+    }
+
+    // Show Toast
+    function showToast(message) {
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    // Show Modal
+    function showModal(title, message) {
+      const modal = document.createElement('div');
+      modal.className = 'modal-overlay active';
+      modal.innerHTML = `
+        <div class="modal">
+          <h2 class="text-2xl font-bold mb-4">${title}</h2>
+          <p class="text-gray-700 mb-6">${message}</p>
+          <button onclick="this.closest('.modal-overlay').remove()" class="btn btn-primary">Close</button>
+        </div>
+      `;
+      document.body.appendChild(modal);
+    }
+
+    // Toggle Search
+    function toggleSearch() {
+      document.getElementById('searchBar').classList.toggle('hidden');
+      if (!document.getElementById('searchBar').classList.contains('hidden')) {
+        document.getElementById('searchInput').focus();
+      }
+    }
+
+    // Handle Search
+    function handleSearch() {
+      // Simple search implementation
+      showToast('Search feature - try browsing categories instead!');
+    }
+
+    // Toggle Cart (Mobile view)
+    function toggleCart() {
+      if (cart.length > 0) {
+        navigateTo('cart');
+      } else {
+        showToast('Cart is empty. Add products first!');
+      }
+    }
+
+    // Toggle Menu
+    function toggleMenu() {
+      showToast('Mobile navigation - use buttons at top to navigate');
+    }
+
+    // Initialize on load
+    init();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9e612200467dfee5',t:'MTc3NTE0NjUzMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
