@@ -182,12 +182,18 @@
         }
 
         .nav-wrapper {
-            position: sticky;
-            top: 0;
+            position: static;
             z-index: 1000;
             backdrop-filter: blur(10px);
             background: rgba(249, 250, 251, 0.8);
             transition: background 0.3s;
+        }
+
+        @media (min-width: 768px) {
+            .nav-wrapper {
+                position: sticky;
+                top: 0;
+            }
         }
 
         .dark-mode .nav-wrapper {
